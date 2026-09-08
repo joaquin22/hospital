@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: joaquin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: hospital-db
+    ports:
+      - "5432:5432"
+    volumes:
+      - hotel_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U joaquin -d hospital-db" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: ..
+      dockerfile: build/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - GIN_MODE=release
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=joaquin
+      - DB_PASSWORD=password
+      - DB_NAME=hospital-db
+      - DB_SSLMODE=disable
+
+volumes:
+  hotel_pg_data:
