@@ -17,4 +17,4 @@ func NewPhone(number string) (Phone, error) {
 	return Phone{number: number}, nil
 }
 
-func (p *Phone) String() string { return p.number }
+func (p Phone) String() string { return p.number }
