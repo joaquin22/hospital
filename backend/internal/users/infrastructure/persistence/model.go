@@ -7,6 +7,7 @@ type UserModel struct {
 	FullName  string `gorm:"size:150;not null" json:"full_name"`
 	Email     string `gorm:"size:100;unique;not null" json:"email"`
 	Password  string `gorm:"size:255;not null" json:"password"`
+	Dni       string `gorm:"size:20;unique;not null" json:"dni"`
 	Role      string
 	Active    bool `gorm:"default:true" json:"active"`
 	CreatedAt time.Time
