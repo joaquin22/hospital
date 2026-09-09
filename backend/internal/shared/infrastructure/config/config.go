@@ -3,28 +3,33 @@ package config
 import (
 	"fmt"
 	"os"
+	"strconv"
 )
 
 type Config struct {
-	Port       string
-	DBHost     string
-	DBPort     string
-	DBUser     string
-	DBPassword string
-	DBName     string
-	DBSSLMode  string
+	Port             string
+	DBHost           string
+	DBPort           string
+	DBUser           string
+	DBPassword       string
+	DBName           string
+	DBSSLMode        string
+	JWTSecret        string
+	JWTExpiryMinutes int
 }
 
 func LoadConfig() *Config {
 
 	return &Config{
-		Port:       os.Getenv("PORT"),
-		DBHost:     os.Getenv("DB_HOST"),
-		DBPort:     os.Getenv("DB_PORT"),
-		DBUser:     os.Getenv("DB_USER"),
-		DBPassword: os.Getenv("DB_PASSWORD"),
-		DBName:     os.Getenv("DB_NAME"),
-		DBSSLMode:  os.Getenv("DB_SSL_MODE"),
+		Port:             getEnv("PORT", "8080"),
+		DBHost:           getEnv("DB_HOST", "localhost"),
+		DBPort:           getEnv("DB_PORT", "5432"),
+		DBUser:           getEnv("DB_USER", "postgres"),
+		DBPassword:       getEnv("DB_PASSWORD", "password"),
+		DBName:           getEnv("DB_NAME", "postgres"),
+		DBSSLMode:        getEnv("DB_SSL_MODE", "disable"),
+		JWTSecret:        getEnv("JWT_SECRET", "secret"),
+		JWTExpiryMinutes: getEnvInt("JWT_EXPIRY_MINUTES", 60),
 	}
 }
 
@@ -39,4 +44,21 @@ func (cfg *Config) GetDatabaseDSN() string {
 		cfg.DBName,
 		cfg.DBSSLMode,
 	)
+}
+
+func getEnv(key string, defaultValue string) string {
+	if value := os.Getenv(key); value != "" {
+		return value
+	}
+	return defaultValue
+}
+
+func getEnvInt(key string, defaultValue int) int {
+
+	if valueStr := os.Getenv(key); valueStr != "" {
+		if value, err := strconv.Atoi(valueStr); err == nil {
+			return value
+		}
+	}
+	return defaultValue
 }
