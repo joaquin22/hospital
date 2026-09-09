@@ -3,9 +3,15 @@ package main
 import (
 	"log"
 
+	"github.com/gin-gonic/gin"
 	"github.com/joaquin22/hospital-api/internal/shared/infrastructure/config"
 	"github.com/joaquin22/hospital-api/internal/shared/infrastructure/database"
 	"github.com/joho/godotenv"
+
+	userApp "github.com/joaquin22/hospital-api/internal/users/application"
+	userHTTP "github.com/joaquin22/hospital-api/internal/users/infrastructure/http"
+	userPersistence "github.com/joaquin22/hospital-api/internal/users/infrastructure/persistence"
+	userSecurity "github.com/joaquin22/hospital-api/internal/users/infrastructure/security"
 )
 
 func main() {
@@ -25,18 +31,25 @@ func main() {
 		log.Fatalf("error en migraciones: %v", err)
 	}
 
+	userRepo := userPersistence.NewGormUserRepository(db)
+	passwordHasher := userSecurity.NewBcryptHasher()
+	tokenManager := userSecurity.NewJWTTokenGenerator(cfg.JWTSecret, cfg.JWTExpiryMinutes)
+
+	registerUserUC := userApp.NewRegisterUserUseCase(userRepo, passwordHasher)
+	loginUserUC := userApp.NewLoginUserUseCase(userRepo, passwordHasher, tokenManager)
+	userHandler := userHTTP.NewUserHandler(registerUserUC, loginUserUC)
 	// // Create a Gin router with default middleware (logger and recovery)
-	// r := gin.Default()
+	router := gin.New()
+
+	userHTTP.RegisterRoutes(router, userHandler)
 
 	// // Define a simple GET endpoint
-	// r.GET("/ping", func(c *gin.Context) {
-	// 	// Return JSON response
-	// 	c.JSON(http.StatusOK, gin.H{
-	// 		"message": "pong",
-	// 	})
-	// })
+	router.GET("/health", func(c *gin.Context) {
+		c.JSON(200, gin.H{"status": "ok"})
+	})
 
-	// // Start server on port 8080 (default)
-	// // Server will listen on 0.0.0.0:8080 (localhost:8080 on Windows)
-	// r.Run()
+	log.Printf("servidor escuchando en :%s", cfg.Port)
+	if err := router.Run(":" + cfg.Port); err != nil {
+		log.Fatalf("error iniciando servidor: %v", err)
+	}
 }
