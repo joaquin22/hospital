@@ -64,7 +64,7 @@ func (p *Patient) IsActive() bool {
 func (p *Patient) ID() uint             { return p.id }
 func (p *Patient) FirstName() string    { return p.firstName }
 func (p *Patient) LastName() string     { return p.lastName }
-func (p *Patient) DNI() Dni             { return p.dni }
+func (p *Patient) Dni() Dni             { return p.dni }
 func (p *Patient) Email() Email         { return p.email }
 func (p *Patient) Phone() Phone         { return p.phone }
 func (p *Patient) CreatedAt() time.Time { return p.createdAt }
