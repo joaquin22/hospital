@@ -2,6 +2,7 @@ package persistence
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/joaquin22/hospital-api/internal/patients/domain"
 	"gorm.io/gorm"
@@ -36,7 +37,7 @@ func (r *GormPatientRepository) Save(patient *domain.Patient) error {
 	return nil
 }
 
-func (r *GormPatientRepository) FindByID(id string) (*domain.Patient, error) {
+func (r *GormPatientRepository) FindByID(id uint) (*domain.Patient, error) {
 	var model PatientModel
 	if err := r.db.First(&model, "id = ?", id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -52,6 +53,72 @@ func (r *GormPatientRepository) FindByID(id string) (*domain.Patient, error) {
 	}
 
 	return patient, nil
+}
+
+func (r *GormPatientRepository) FindByEmail(email domain.Email) (*domain.Patient, error) {
+	var model PatientModel
+
+	if err := r.db.First(&model, "email = ?", email.String()).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	patient, err := toDomain(&model)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return patient, nil
+}
+
+func (r *GormPatientRepository) FindByDni(dni domain.Dni) (*domain.Patient, error) {
+	var model PatientModel
+	if err := r.db.First(&model, "dni = ?", dni.String()).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	patient, err := toDomain(&model)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return patient, nil
+}
+
+func (r *GormPatientRepository) ListPatients() ([]*domain.Patient, error) {
+	var models []PatientModel
+	if err := r.db.Find(&models).Error; err != nil {
+		return nil, err
+	}
+
+	patients := make([]*domain.Patient, 0, len(models))
+	for _, patient := range models {
+		dni, err := domain.NewDni(patient.Dni)
+		if err != nil {
+			return nil, err
+		}
+		email, err := domain.NewEmail(patient.Email)
+		if err != nil {
+			return nil, err
+		}
+
+		phone, err := domain.NewPhone(patient.Phone)
+		if err != nil {
+			return nil, err
+		}
+		patients = append(patients, domain.Rehydrate(
+			patient.ID, patient.FirstName, patient.LastName, dni, email, phone, patient.Active, patient.CreatedAt, patient.UpdatedAt,
+		))
+	}
+	fmt.Println(patients)
+	return patients, nil
 }
 
 func toDomain(model *PatientModel) (*domain.Patient, error) {

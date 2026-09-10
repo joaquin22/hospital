@@ -1,0 +1,37 @@
+package application
+
+import "github.com/joaquin22/hospital-api/internal/patients/domain"
+
+type ListPatientsUseCase struct {
+	repository domain.PatientRepository
+}
+
+func NewListPatientsUseCase(repo domain.PatientRepository) *ListPatientsUseCase {
+	return &ListPatientsUseCase{
+		repository: repo,
+	}
+}
+
+func (uc *ListPatientsUseCase) ListPatients() ([]*CreatePatientOutput, error) {
+	patients, err := uc.repository.ListPatients()
+
+	if err != nil {
+		return nil, err
+	}
+
+	outputs := make([]*CreatePatientOutput, 0, len(patients))
+	for _, p := range patients {
+		outputs = append(outputs, &CreatePatientOutput{
+			ID:        p.ID(),
+			FirstName: p.FirstName(),
+			LastName:  p.LastName(),
+			Email:     p.Email().String(),
+			Dni:       p.Dni().String(),
+			Phone:     p.Phone().String(),
+			Active:    p.IsActive(),
+			CreatedAt: p.CreatedAt(),
+			UpdatedAt: p.UpdatedAt(),
+		})
+	}
+	return outputs, nil
+}
