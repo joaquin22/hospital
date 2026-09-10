@@ -6,8 +6,12 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/joaquin22/hospital-api/internal/shared/infrastructure/config"
 	"github.com/joaquin22/hospital-api/internal/shared/infrastructure/database"
+	"github.com/joaquin22/hospital-api/internal/shared/infrastructure/middleware"
 	"github.com/joho/godotenv"
 
+	patientApp "github.com/joaquin22/hospital-api/internal/patients/application"
+	patientHTTP "github.com/joaquin22/hospital-api/internal/patients/infrastructure/http"
+	patientPersistence "github.com/joaquin22/hospital-api/internal/patients/infrastructure/persistence"
 	userApp "github.com/joaquin22/hospital-api/internal/users/application"
 	userHTTP "github.com/joaquin22/hospital-api/internal/users/infrastructure/http"
 	userPersistence "github.com/joaquin22/hospital-api/internal/users/infrastructure/persistence"
@@ -31,17 +35,39 @@ func main() {
 		log.Fatalf("error en migraciones: %v", err)
 	}
 
+	// --- Wiring: User (auth) ---
 	userRepo := userPersistence.NewGormUserRepository(db)
 	passwordHasher := userSecurity.NewBcryptHasher()
 	tokenManager := userSecurity.NewJWTTokenGenerator(cfg.JWTSecret, cfg.JWTExpiryMinutes)
-
 	registerUserUC := userApp.NewRegisterUserUseCase(userRepo, passwordHasher)
 	loginUserUC := userApp.NewLoginUserUseCase(userRepo, passwordHasher, tokenManager)
 	userHandler := userHTTP.NewUserHandler(registerUserUC, loginUserUC)
-	// // Create a Gin router with default middleware (logger and recovery)
-	router := gin.New()
 
-	userHTTP.RegisterRoutes(router, userHandler)
+	// --- Wiring: Patients ---
+
+	patientRepo := patientPersistence.NewGormPatientRepository(db)
+	createPatientUC := patientApp.NewCreatePatientUseCase(patientRepo)
+	listPatientsUC := patientApp.NewListPatientsUseCase(patientRepo)
+	patientHandler := patientHTTP.NewPatientHandler(createPatientUC, listPatientsUC)
+
+	// --- HTTP server ---
+
+	router := gin.New()
+	router.Use(middleware.Logger(), middleware.CORS(), gin.Recovery())
+	v1 := router.Group("/api")
+
+	// --- Public routes ---
+	userHTTP.RegisterRoutes(v1, userHandler)
+	patientHTTP.RegisterPublicRoutes(v1, patientHandler)
+
+	// --- Protected routes ---
+	protected := v1.Group("")
+	protected.Use(middleware.JWTAuth(cfg.JWTSecret))
+	{
+		admin := protected.Group("")
+		admin.Use(middleware.RequireRole("admin"))
+		patientHTTP.RegisterProtectedRoutes(admin, patientHandler)
+	}
 
 	// // Define a simple GET endpoint
 	router.GET("/health", func(c *gin.Context) {
