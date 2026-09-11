@@ -1,0 +1,33 @@
+info:
+  name: Update Patient
+  type: http
+  seq: 4
+
+http:
+  method: PUT
+  url: "{{url}}/patients/:id"
+  headers:
+    - name: Authorization
+      value: Bearer {{token}}
+  params:
+    - name: id
+      value: "1"
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+        "first_name": "Juan",
+        "last_name": "Doe",
+        "dni": "12345678",
+        "email": "johndo@example.com",
+        "phone": "1234567890"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

@@ -1,0 +1,29 @@
+info:
+  name: Create Patient
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{url}}/patients"
+  headers:
+    - name: Authorization
+      value: Bearer {{token}}
+  body:
+    type: json
+    data: |-
+      {
+          "first_name": "John",
+          "last_name": "Doe",
+          "dni": "12345671",
+          "email": "johndoe3@example.com",
+          "phone" : "1234567890"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
