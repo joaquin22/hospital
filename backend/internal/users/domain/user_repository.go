@@ -5,4 +5,5 @@ type UserRepository interface {
 	FindByID(id string) (*User, error)
 	FindByEmail(email Email) (*User, error)
 	FindByDni(dni Dni) (*User, error)
+	FindAll() ([]*User, error)
 }

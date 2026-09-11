@@ -2,7 +2,6 @@ package persistence
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/joaquin22/hospital-api/internal/patients/domain"
 	"gorm.io/gorm"
@@ -92,9 +91,9 @@ func (r *GormPatientRepository) FindByDni(dni domain.Dni) (*domain.Patient, erro
 	return patient, nil
 }
 
-func (r *GormPatientRepository) ListPatients() ([]*domain.Patient, error) {
+func (r *GormPatientRepository) FindAll() ([]*domain.Patient, error) {
 	var models []PatientModel
-	if err := r.db.Find(&models).Error; err != nil {
+	if err := r.db.Order("id ASC").Find(&models).Error; err != nil {
 		return nil, err
 	}
 
@@ -117,7 +116,7 @@ func (r *GormPatientRepository) ListPatients() ([]*domain.Patient, error) {
 			patient.ID, patient.FirstName, patient.LastName, dni, email, phone, patient.Active, patient.CreatedAt, patient.UpdatedAt,
 		))
 	}
-	fmt.Println(patients)
+
 	return patients, nil
 }
 

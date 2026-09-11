@@ -74,6 +74,24 @@ func (r *GormUserRepository) FindByDni(dni domain.Dni) (*domain.User, error) {
 	return toDomain(&model)
 }
 
+func (r *GormUserRepository) FindAll() ([]*domain.User, error) {
+	var models []UserModel
+	if err := r.db.Find(&models).Error; err != nil {
+		return nil, err
+	}
+
+	users := make([]*domain.User, 0, len(models))
+	for _, model := range models {
+		user, err := toDomain(&model)
+		if err != nil {
+			return nil, err
+		}
+		users = append(users, user)
+	}
+
+	return users, nil
+}
+
 func toDomain(m *UserModel) (*domain.User, error) {
 	email, err := domain.NewEmail(m.Email)
 	if err != nil {

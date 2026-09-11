@@ -5,5 +5,5 @@ type PatientRepository interface {
 	FindByID(id uint) (*Patient, error)
 	FindByDni(dni Dni) (*Patient, error)
 	FindByEmail(email Email) (*Patient, error)
-	ListPatients() ([]*Patient, error)
+	FindAll() ([]*Patient, error)
 }

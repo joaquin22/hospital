@@ -9,4 +9,9 @@ func RegisterRoutes(rg *gin.RouterGroup, handler *UserHandler) {
 		auth.POST("/login", handler.Login)
 	}
 
+	users := rg.Group("/users")
+	{
+		users.GET("/", handler.ListUsers)
+	}
+
 }

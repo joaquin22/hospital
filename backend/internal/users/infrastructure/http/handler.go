@@ -8,14 +8,16 @@ import (
 )
 
 type UserHandler struct {
-	registerUC *application.RegisterUserUseCase
-	loginUC    *application.LoginUserUseCase
+	registerUC  *application.RegisterUserUseCase
+	loginUC     *application.LoginUserUseCase
+	listUsersUC *application.ListUsersUseCase
 }
 
-func NewUserHandler(registerUC *application.RegisterUserUseCase, loginUC *application.LoginUserUseCase) *UserHandler {
+func NewUserHandler(registerUC *application.RegisterUserUseCase, loginUC *application.LoginUserUseCase, listUsersUC *application.ListUsersUseCase) *UserHandler {
 	return &UserHandler{
-		registerUC: registerUC,
-		loginUC:    loginUC,
+		registerUC:  registerUC,
+		loginUC:     loginUC,
+		listUsersUC: listUsersUC,
 	}
 }
 
@@ -73,4 +75,14 @@ func (h *UserHandler) Login(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, output)
+}
+
+func (h *UserHandler) ListUsers(c *gin.Context) {
+	users, err := h.listUsersUC.Execute()
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, users)
 }

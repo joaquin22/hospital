@@ -3,17 +3,17 @@ package application
 import "github.com/joaquin22/hospital-api/internal/patients/domain"
 
 type ListPatientsUseCase struct {
-	repository domain.PatientRepository
+	repo domain.PatientRepository
 }
 
 func NewListPatientsUseCase(repo domain.PatientRepository) *ListPatientsUseCase {
 	return &ListPatientsUseCase{
-		repository: repo,
+		repo: repo,
 	}
 }
 
-func (uc *ListPatientsUseCase) ListPatients() ([]*CreatePatientOutput, error) {
-	patients, err := uc.repository.ListPatients()
+func (uc *ListPatientsUseCase) Execute() ([]*CreatePatientOutput, error) {
+	patients, err := uc.repo.FindAll()
 
 	if err != nil {
 		return nil, err

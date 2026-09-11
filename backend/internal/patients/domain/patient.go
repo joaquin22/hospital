@@ -1,6 +1,8 @@
 package domain
 
-import "time"
+import (
+	"time"
+)
 
 type Patient struct {
 	id        uint
@@ -61,11 +63,22 @@ func (p *Patient) IsActive() bool {
 	return p.active
 }
 
+func (p *Patient) UpdatePatient(firstName, lastName string, dni Dni, email Email, phone Phone) error {
+	p.firstName = firstName
+	p.lastName = lastName
+	p.dni = dni
+	p.email = email
+	p.phone = phone
+	p.updatedAt = time.Now()
+	return nil
+}
+
 func (p *Patient) ID() uint             { return p.id }
 func (p *Patient) FirstName() string    { return p.firstName }
 func (p *Patient) LastName() string     { return p.lastName }
 func (p *Patient) Dni() Dni             { return p.dni }
 func (p *Patient) Email() Email         { return p.email }
 func (p *Patient) Phone() Phone         { return p.phone }
+func (p *Patient) Active() bool         { return p.active }
 func (p *Patient) CreatedAt() time.Time { return p.createdAt }
 func (p *Patient) UpdatedAt() time.Time { return p.updatedAt }
