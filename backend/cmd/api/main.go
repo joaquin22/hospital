@@ -12,6 +12,7 @@ import (
 	patientApp "github.com/joaquin22/hospital-api/internal/patients/application"
 	patientHTTP "github.com/joaquin22/hospital-api/internal/patients/infrastructure/http"
 	patientPersistence "github.com/joaquin22/hospital-api/internal/patients/infrastructure/persistence"
+
 	userApp "github.com/joaquin22/hospital-api/internal/users/application"
 	userHTTP "github.com/joaquin22/hospital-api/internal/users/infrastructure/http"
 	userPersistence "github.com/joaquin22/hospital-api/internal/users/infrastructure/persistence"
@@ -41,14 +42,17 @@ func main() {
 	tokenManager := userSecurity.NewJWTTokenGenerator(cfg.JWTSecret, cfg.JWTExpiryMinutes)
 	registerUserUC := userApp.NewRegisterUserUseCase(userRepo, passwordHasher)
 	loginUserUC := userApp.NewLoginUserUseCase(userRepo, passwordHasher, tokenManager)
-	userHandler := userHTTP.NewUserHandler(registerUserUC, loginUserUC)
+	listUsersUC := userApp.NewListUsersUseCase(userRepo)
+	userHandler := userHTTP.NewUserHandler(registerUserUC, loginUserUC, listUsersUC)
 
 	// --- Wiring: Patients ---
 
 	patientRepo := patientPersistence.NewGormPatientRepository(db)
 	createPatientUC := patientApp.NewCreatePatientUseCase(patientRepo)
 	listPatientsUC := patientApp.NewListPatientsUseCase(patientRepo)
-	patientHandler := patientHTTP.NewPatientHandler(createPatientUC, listPatientsUC)
+	getPatientUC := patientApp.NewGetPatientUseCase(patientRepo)
+	updatePatientUC := patientApp.NewUpdatePatientUseCase(patientRepo)
+	patientHandler := patientHTTP.NewPatientHandler(createPatientUC, listPatientsUC, getPatientUC, updatePatientUC)
 
 	// --- HTTP server ---
 
