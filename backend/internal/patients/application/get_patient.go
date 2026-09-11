@@ -12,22 +12,12 @@ func NewGetPatientUseCase(repo domain.PatientRepository) *GetPatientUseCase {
 	}
 }
 
-func (uc *GetPatientUseCase) GetPatient(id uint) (*CreatePatientOutput, error) {
+func (uc *GetPatientUseCase) GetPatient(id uint) (*PatientOutput, error) {
 	patient, err := uc.repo.FindByID(id)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return &CreatePatientOutput{
-		ID:        patient.ID(),
-		FirstName: patient.FirstName(),
-		LastName:  patient.LastName(),
-		Email:     patient.Email().String(),
-		Dni:       patient.Dni().String(),
-		Phone:     patient.Phone().String(),
-		Active:    patient.IsActive(),
-		CreatedAt: patient.CreatedAt(),
-		UpdatedAt: patient.UpdatedAt(),
-	}, nil
+	return toOutput(patient), nil
 }

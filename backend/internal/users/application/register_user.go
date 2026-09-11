@@ -16,7 +16,7 @@ func NewRegisterUserUseCase(repo domain.UserRepository, hasher domain.PasswordHa
 	}
 }
 
-func (uc *RegisterUserUseCase) Execute(userInput RegisterUserInput) (*RegisterUserOutput, error) {
+func (uc *RegisterUserUseCase) Execute(userInput RegisterUserInput) (*UsersOutput, error) {
 
 	email, err := domain.NewEmail(userInput.Email)
 
@@ -67,17 +67,4 @@ func (uc *RegisterUserUseCase) Execute(userInput RegisterUserInput) (*RegisterUs
 	}
 
 	return toOutput(user), nil
-}
-
-func toOutput(u *domain.User) *RegisterUserOutput {
-	return &RegisterUserOutput{
-		ID:        u.ID(),
-		FullName:  u.FullName(),
-		Email:     u.Email().String(),
-		Role:      string(u.Role()),
-		Dni:       u.Dni().String(),
-		Active:    u.Active(),
-		CreatedAt: u.CreatedAt(),
-		UpdatedAt: u.UpdatedAt(),
-	}
 }

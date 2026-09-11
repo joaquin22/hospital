@@ -12,7 +12,7 @@ func NewCreatePatientUseCase(repo domain.PatientRepository) *CreatePatientUseCas
 	}
 }
 
-func (uc *CreatePatientUseCase) Execute(input CreatePatientInput) (*CreatePatientOutput, error) {
+func (uc *CreatePatientUseCase) Execute(input CreatePatientInput) (*PatientOutput, error) {
 	email, err := domain.NewEmail(input.Email)
 	if err != nil {
 		return nil, err
@@ -57,16 +57,4 @@ func (uc *CreatePatientUseCase) Execute(input CreatePatientInput) (*CreatePatien
 	}
 
 	return toOutput(patient), nil
-}
-
-func toOutput(patient *domain.Patient) *CreatePatientOutput {
-	return &CreatePatientOutput{
-		ID:        patient.ID(),
-		FirstName: patient.FirstName(),
-		LastName:  patient.LastName(),
-		Dni:       patient.Dni().String(),
-		Email:     patient.Email().String(),
-		Phone:     patient.Phone().String(),
-		Active:    patient.IsActive(),
-	}
 }

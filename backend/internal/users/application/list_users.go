@@ -21,16 +21,7 @@ func (uc *ListUsersUseCase) Execute() ([]*UsersOutput, error) {
 
 	outputs := make([]*UsersOutput, 0, len(users))
 	for _, u := range users {
-		outputs = append(outputs, &UsersOutput{
-			ID:        u.ID(),
-			FullName:  u.FullName(),
-			Email:     u.Email().String(),
-			Dni:       u.Dni().String(),
-			Role:      string(u.Role()),
-			Active:    u.Active(),
-			CreatedAt: u.CreatedAt(),
-			UpdatedAt: u.UpdatedAt(),
-		})
+		outputs = append(outputs, toOutput(u))
 	}
 	return outputs, nil
 }

@@ -7,14 +7,16 @@ func RegisterProtectedRoutes(rg *gin.RouterGroup, handler *PatientHandler) {
 	{
 		patients.POST("", handler.CreatePatient)
 		patients.PUT("/:id", handler.UpdatePatient)
-
-	}
-}
-
-func RegisterPublicRoutes(rg *gin.RouterGroup, handler *PatientHandler) {
-	patients := rg.Group("/patients")
-	{
+		patients.PATCH("/:id", handler.PatchPatient)
 		patients.GET("", handler.ListPatients)
 		patients.GET("/:id", handler.GetPatient)
 	}
 }
+
+// func RegisterPublicRoutes(rg *gin.RouterGroup, handler *PatientHandler) {
+// 	patients := rg.Group("/patients")
+// 	{
+// 		patients.GET("", handler.ListPatients)
+// 		patients.GET("/:id", handler.GetPatient)
+// 	}
+// }

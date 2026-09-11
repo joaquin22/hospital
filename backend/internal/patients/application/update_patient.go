@@ -12,7 +12,7 @@ func NewUpdatePatientUseCase(repo domain.PatientRepository) *UpdatePatientUseCas
 	return &UpdatePatientUseCase{repo: repo}
 }
 
-func (uc *UpdatePatientUseCase) Execute(input UpdatePatientInput) (*UpdatePatientOutput, error) {
+func (uc *UpdatePatientUseCase) Execute(input UpdatePatientInput) (*PatientOutput, error) {
 
 	patient, err := uc.repo.FindByID(input.ID)
 
@@ -67,15 +67,5 @@ func (uc *UpdatePatientUseCase) Execute(input UpdatePatientInput) (*UpdatePatien
 		return nil, err
 	}
 
-	return &UpdatePatientOutput{
-		ID:        patient.ID(),
-		FirstName: patient.FirstName(),
-		LastName:  patient.LastName(),
-		Dni:       patient.Dni().String(),
-		Email:     patient.Email().String(),
-		Phone:     patient.Phone().String(),
-		Active:    patient.Active(),
-		CreatedAt: patient.CreatedAt(),
-		UpdatedAt: patient.UpdatedAt(),
-	}, nil
+	return toOutput(patient), nil
 }

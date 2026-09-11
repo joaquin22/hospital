@@ -52,7 +52,8 @@ func main() {
 	listPatientsUC := patientApp.NewListPatientsUseCase(patientRepo)
 	getPatientUC := patientApp.NewGetPatientUseCase(patientRepo)
 	updatePatientUC := patientApp.NewUpdatePatientUseCase(patientRepo)
-	patientHandler := patientHTTP.NewPatientHandler(createPatientUC, listPatientsUC, getPatientUC, updatePatientUC)
+	patchPatientUC := patientApp.NewPatchPatientUseCase(patientRepo)
+	patientHandler := patientHTTP.NewPatientHandler(createPatientUC, listPatientsUC, getPatientUC, updatePatientUC, patchPatientUC)
 
 	// --- HTTP server ---
 
@@ -62,7 +63,7 @@ func main() {
 
 	// --- Public routes ---
 	userHTTP.RegisterRoutes(v1, userHandler)
-	patientHTTP.RegisterPublicRoutes(v1, patientHandler)
+	// patientHTTP.RegisterPublicRoutes(v1, patientHandler)
 
 	// --- Protected routes ---
 	protected := v1.Group("")

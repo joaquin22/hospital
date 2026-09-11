@@ -1,6 +1,10 @@
 package application
 
-import "time"
+import (
+	"time"
+
+	"github.com/joaquin22/hospital-api/internal/users/domain"
+)
 
 type RegisterUserInput struct {
 	FullName string
@@ -40,4 +44,17 @@ type UsersOutput struct {
 	Active    bool      `json:"active"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
+}
+
+func toOutput(u *domain.User) *UsersOutput {
+	return &UsersOutput{
+		ID:        u.ID(),
+		FullName:  u.FullName(),
+		Email:     u.Email().String(),
+		Role:      string(u.Role()),
+		Dni:       u.Dni().String(),
+		Active:    u.Active(),
+		CreatedAt: u.CreatedAt(),
+		UpdatedAt: u.UpdatedAt(),
+	}
 }
