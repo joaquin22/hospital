@@ -12,7 +12,7 @@ func NewGetPatientUseCase(repo domain.PatientRepository) *GetPatientUseCase {
 	}
 }
 
-func (uc *GetPatientUseCase) GetPatient(id uint) (*PatientOutput, error) {
+func (uc *GetPatientUseCase) Execute(id uint) (*PatientOutput, error) {
 	patient, err := uc.repo.FindByID(id)
 
 	if err != nil {
