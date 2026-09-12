@@ -13,6 +13,10 @@ import (
 	patientHTTP "github.com/joaquin22/hospital-api/internal/patients/infrastructure/http"
 	patientPersistence "github.com/joaquin22/hospital-api/internal/patients/infrastructure/persistence"
 
+	specialtyApp "github.com/joaquin22/hospital-api/internal/specialty/application"
+	specialtyHTTP "github.com/joaquin22/hospital-api/internal/specialty/infrastructure/http"
+	specialityPersistence "github.com/joaquin22/hospital-api/internal/specialty/infrastructure/persistence"
+
 	userApp "github.com/joaquin22/hospital-api/internal/users/application"
 	userHTTP "github.com/joaquin22/hospital-api/internal/users/infrastructure/http"
 	userPersistence "github.com/joaquin22/hospital-api/internal/users/infrastructure/persistence"
@@ -55,10 +59,22 @@ func main() {
 	patchPatientUC := patientApp.NewPatchPatientUseCase(patientRepo)
 	patientHandler := patientHTTP.NewPatientHandler(createPatientUC, listPatientsUC, getPatientUC, updatePatientUC, patchPatientUC)
 
+	// --- Wiring: Specialities ---
+
+	specialityRepo := specialityPersistence.NewGormSpecialityRepository(db)
+	createSpecialityUC := specialtyApp.NewCreateSpecilityUseCase(specialityRepo)
+	getSpecialityUC := specialtyApp.NewGetSpecialityUseCase(specialityRepo)
+	listSpecialitiesUC := specialtyApp.NewListSpecialitiesUseCase(specialityRepo)
+	updateSpecialityUC := specialtyApp.NewUpdateSpecialityUseCase(specialityRepo)
+	patchSpecialityUC := specialtyApp.NewPatchSpecialityUseCase(specialityRepo)
+	specialityHandler := specialtyHTTP.NewSpecialityHandler(createSpecialityUC, updateSpecialityUC, patchSpecialityUC, listSpecialitiesUC, getSpecialityUC)
+
 	// --- HTTP server ---
 
 	router := gin.New()
-	router.Use(middleware.Logger(), middleware.CORS(), gin.Recovery())
+	router.Use(middleware.Logger(), middleware.CORS(), middleware.Recovery())
+	router.NoRoute(middleware.NotFound())
+	router.NoMethod(middleware.MethodNotAllowed())
 	v1 := router.Group("/api")
 
 	// --- Public routes ---
@@ -72,6 +88,7 @@ func main() {
 		admin := protected.Group("")
 		admin.Use(middleware.RequireRole("admin"))
 		patientHTTP.RegisterProtectedRoutes(admin, patientHandler)
+		specialtyHTTP.RegisterRoutes(admin, specialityHandler)
 	}
 
 	// // Define a simple GET endpoint
