@@ -9,6 +9,7 @@ http:
   headers:
     - name: Authorization
       value: Bearer {{token}}
+      disabled: true
   body:
     type: json
     data: |-

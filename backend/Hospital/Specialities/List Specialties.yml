@@ -1,15 +1,14 @@
 info:
-  name: Get Patient
+  name: List Specialties
   type: http
-  seq: 3
+  seq: 2
 
 http:
   method: GET
-  url: "{{url}}/patients/:id"
-  params:
-    - name: id
-      value: "11"
-      type: path
+  url: "{{url}}/specialty"
+  body:
+    type: json
+    data: ""
   auth: inherit
 
 settings:

@@ -1,23 +1,17 @@
 info:
-  name: Patch Patient
+  name: Patch Specialty
   type: http
   seq: 5
 
 http:
   method: PATCH
-  url: "{{url}}/patients/:id"
-  headers:
-    - name: Authorization
-      value: Bearer {{token}}
-  params:
-    - name: id
-      value: "1"
-      type: path
+  url: "{{url}}/specialty"
   body:
     type: json
     data: |-
       {
-        "phone": "99999999"
+        "name":"Test",
+        "description":"Test"
       }
   auth: inherit
 

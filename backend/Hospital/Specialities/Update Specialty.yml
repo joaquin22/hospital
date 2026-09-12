@@ -1,15 +1,22 @@
 info:
-  name: Get Patient
+  name: Update Specialty
   type: http
-  seq: 3
+  seq: 4
 
 http:
-  method: GET
-  url: "{{url}}/patients/:id"
+  method: PUT
+  url: "{{url}}/specialty/:id"
   params:
     - name: id
       value: "11"
       type: path
+  body:
+    type: json
+    data: |-
+      {
+        "name":"Test update",
+        "description":"Test"
+      }
   auth: inherit
 
 settings:

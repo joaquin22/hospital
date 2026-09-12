@@ -3,4 +3,4 @@ variables:
   - name: url
     value: http://localhost:8080/api
   - name: token
-    value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzIiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNzg5MTA2MzMxLCJpYXQiOjE3ODkxMDI3MzF9.ICKntjmA91idLuQP-eScXFCz619Hrdfv9i3-jlqFIzU
+    value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzIiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNzg5MTgyNzU2LCJpYXQiOjE3ODkxNzkxNTZ9.dHuyBSRdcSL1fbmm_9zfGxRfWWPaRLmqLuDk89DQqA0
