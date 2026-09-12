@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joaquin22/hospital-api/internal/shared/infrastructure/response"
 	"github.com/joaquin22/hospital-api/internal/users/application"
 )
 
@@ -25,7 +26,7 @@ func (h *UserHandler) Register(c *gin.Context) {
 
 	var req registerRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(400, gin.H{"error": err.Error()})
+		response.ErrorResponse(c, http.StatusBadRequest, "invalid request body", err)
 		return
 	}
 
@@ -37,17 +38,17 @@ func (h *UserHandler) Register(c *gin.Context) {
 		Role:     req.Role,
 	})
 	if err != nil {
-		c.JSON(500, gin.H{"error": err.Error()})
+		response.ErrorResponse(c, http.StatusInternalServerError, "error registering user", err)
 		return
 	}
 
-	c.JSON(http.StatusCreated, output)
+	response.SuccessResponse(c, http.StatusCreated, output)
 }
 
 func (h *UserHandler) Login(c *gin.Context) {
 	var req loginRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(400, gin.H{"error": err.Error()})
+		response.ErrorResponse(c, http.StatusBadRequest, "invalid request body", err)
 		return
 	}
 
@@ -57,19 +58,19 @@ func (h *UserHandler) Login(c *gin.Context) {
 	})
 
 	if err != nil {
-		c.JSON(500, gin.H{"error": err.Error()})
+		response.ErrorResponse(c, http.StatusInternalServerError, "error logging in", err)
 		return
 	}
 
-	c.JSON(http.StatusOK, output)
+	response.SuccessResponse(c, http.StatusOK, output)
 }
 
 func (h *UserHandler) ListUsers(c *gin.Context) {
 	users, err := h.listUsersUC.Execute()
 	if err != nil {
-		c.JSON(500, gin.H{"error": err.Error()})
+		response.ErrorResponse(c, http.StatusInternalServerError, "error listing users", err)
 		return
 	}
 
-	c.JSON(http.StatusOK, users)
+	response.SuccessResponse(c, http.StatusOK, users)
 }
