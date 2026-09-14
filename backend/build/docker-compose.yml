@@ -11,7 +11,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - hotel_pg_data:/var/lib/postgresql/data
+      - hospital_pg_data:/var/lib/postgresql/data
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U joaquin -d hospital-db" ]
       interval: 5s
@@ -39,4 +39,4 @@ services:
       - DB_SSLMODE=disable
 
 volumes:
-  hotel_pg_data:
+  hospital_pg_data:

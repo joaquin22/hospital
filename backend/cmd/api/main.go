@@ -13,6 +13,11 @@ import (
 	patientHTTP "github.com/joaquin22/hospital-api/internal/patients/infrastructure/http"
 	patientPersistence "github.com/joaquin22/hospital-api/internal/patients/infrastructure/persistence"
 
+	doctorApp "github.com/joaquin22/hospital-api/internal/doctors/application"
+	doctorInfra "github.com/joaquin22/hospital-api/internal/doctors/infrastructure"
+	doctorHTTP "github.com/joaquin22/hospital-api/internal/doctors/infrastructure/http"
+	doctorPersistence "github.com/joaquin22/hospital-api/internal/doctors/infrastructure/persistence"
+
 	specialtyApp "github.com/joaquin22/hospital-api/internal/specialty/application"
 	specialtyHTTP "github.com/joaquin22/hospital-api/internal/specialty/infrastructure/http"
 	specialityPersistence "github.com/joaquin22/hospital-api/internal/specialty/infrastructure/persistence"
@@ -47,7 +52,8 @@ func main() {
 	registerUserUC := userApp.NewRegisterUserUseCase(userRepo, passwordHasher)
 	loginUserUC := userApp.NewLoginUserUseCase(userRepo, passwordHasher, tokenManager)
 	listUsersUC := userApp.NewListUsersUseCase(userRepo)
-	userHandler := userHTTP.NewUserHandler(registerUserUC, loginUserUC, listUsersUC)
+	getUserUC := userApp.NewGetUserUseCase(userRepo)
+	userHandler := userHTTP.NewUserHandler(registerUserUC, loginUserUC, listUsersUC, getUserUC)
 
 	// --- Wiring: Patients ---
 
@@ -69,6 +75,15 @@ func main() {
 	patchSpecialityUC := specialtyApp.NewPatchSpecialityUseCase(specialityRepo)
 	specialityHandler := specialtyHTTP.NewSpecialityHandler(createSpecialityUC, updateSpecialityUC, patchSpecialityUC, listSpecialitiesUC, getSpecialityUC)
 
+	// --- Wiring: Doctor ---
+
+	// --- Register Doctor Routes ---
+
+	doctorRepo := doctorPersistence.NewGormDoctorRepository(db)
+	listDoctorUC := doctorApp.NewListDoctorUseCase(doctorRepo, getUserUC)
+	registerDoctorUC := doctorInfra.NewTransactionalRegisterDoctor(db, passwordHasher)
+	doctorHandler := doctorHTTP.NewDoctorHandler(listDoctorUC, registerDoctorUC)
+
 	// --- HTTP server ---
 
 	router := gin.New()
@@ -78,7 +93,6 @@ func main() {
 	v1 := router.Group("/api")
 
 	// --- Public routes ---
-	userHTTP.RegisterRoutes(v1, userHandler)
 	// patientHTTP.RegisterPublicRoutes(v1, patientHandler)
 
 	// --- Protected routes ---
@@ -87,8 +101,10 @@ func main() {
 	{
 		admin := protected.Group("")
 		admin.Use(middleware.RequireRole("admin"))
+		userHTTP.RegisterRoutes(v1, userHandler)
 		patientHTTP.RegisterProtectedRoutes(admin, patientHandler)
 		specialtyHTTP.RegisterRoutes(admin, specialityHandler)
+		doctorHTTP.RegisterDoctorRoutes(admin, doctorHandler)
 	}
 
 	// // Define a simple GET endpoint
