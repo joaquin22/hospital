@@ -4,6 +4,7 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
+	DoctorPersistence "github.com/joaquin22/hospital-api/internal/doctors/infrastructure/persistence"
 	PatientPersistence "github.com/joaquin22/hospital-api/internal/patients/infrastructure/persistence"
 	SpecialityPersistence "github.com/joaquin22/hospital-api/internal/specialty/infrastructure/persistence"
 	UserPersistence "github.com/joaquin22/hospital-api/internal/users/infrastructure/persistence"
@@ -20,5 +21,6 @@ func AutoMigrate(db *gorm.DB) error {
 		&UserPersistence.UserModel{},
 		&PatientPersistence.PatientModel{},
 		&SpecialityPersistence.SpecialityModel{},
+		&DoctorPersistence.DoctorModel{},
 	)
 }
