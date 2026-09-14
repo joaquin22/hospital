@@ -57,7 +57,7 @@ func (uc *RegisterUserUseCase) Execute(userInput RegisterUserInput) (*UsersOutpu
 		return nil, err
 	}
 
-	user, err := domain.NewUser(userInput.FullName, email, hashedPassword, dni, role)
+	user, err := domain.NewUser(userInput.FirstName, userInput.LastName, email, hashedPassword, dni, role)
 	if err != nil {
 		return nil, err
 	}

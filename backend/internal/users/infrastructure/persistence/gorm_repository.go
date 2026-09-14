@@ -18,6 +18,8 @@ func NewGormUserRepository(db *gorm.DB) *GormUserRepository {
 func (r *GormUserRepository) Save(user *domain.User) error {
 	model := &UserModel{
 		ID:        user.ID(),
+		FirstName: user.FirstName(),
+		LastName:  user.LastName(),
 		Email:     user.Email().String(),
 		Password:  user.PasswordHash(),
 		Dni:       user.Dni().String(),
@@ -33,7 +35,7 @@ func (r *GormUserRepository) Save(user *domain.User) error {
 	return nil
 }
 
-func (r *GormUserRepository) FindByID(id string) (*domain.User, error) {
+func (r *GormUserRepository) FindByID(id uint) (*domain.User, error) {
 	var model UserModel
 	if err := r.db.Where("id = ?", id).First(&model).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -108,5 +110,5 @@ func toDomain(m *UserModel) (*domain.User, error) {
 		return nil, err
 	}
 
-	return domain.Rehydrate(m.ID, m.FullName, email, m.Password, dni, role, m.Active, m.CreatedAt, m.UpdatedAt), nil
+	return domain.Rehydrate(m.ID, m.FirstName, m.LastName, email, m.Password, dni, role, m.Active, m.CreatedAt, m.UpdatedAt), nil
 }

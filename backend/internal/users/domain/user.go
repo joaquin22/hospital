@@ -4,7 +4,8 @@ import "time"
 
 type User struct {
 	id        uint
-	fullName  string
+	firstName string
+	lastName  string
 	email     Email
 	password  string
 	dni       Dni
@@ -14,25 +15,27 @@ type User struct {
 	updatedAt time.Time
 }
 
-func NewUser(fullName string, email Email, password string, dni Dni, role Role) (*User, error) {
-	if fullName == "" {
+func NewUser(firstName, lastName string, email Email, password string, dni Dni, role Role) (*User, error) {
+	if firstName == "" || lastName == "" {
 		return nil, ErrInvalidName
 	}
 
 	return &User{
-		fullName: fullName,
-		email:    email,
-		password: password,
-		dni:      dni,
-		role:     role,
-		active:   true,
+		firstName: firstName,
+		lastName:  lastName,
+		email:     email,
+		password:  password,
+		dni:       dni,
+		role:      role,
+		active:    true,
 	}, nil
 }
 
-func Rehydrate(id uint, name string, email Email, passwordHash string, dni Dni, role Role, active bool, createdAt, updatedAt time.Time) *User {
+func Rehydrate(id uint, firstName, lastName string, email Email, passwordHash string, dni Dni, role Role, active bool, createdAt, updatedAt time.Time) *User {
 	return &User{
 		id:        id,
-		fullName:  name,
+		firstName: firstName,
+		lastName:  lastName,
 		email:     email,
 		password:  passwordHash,
 		dni:       dni,
@@ -60,7 +63,8 @@ func (u *User) Deactivate() {
 }
 
 func (u *User) ID() uint             { return u.id }
-func (u *User) FullName() string     { return u.fullName }
+func (u *User) FirstName() string    { return u.firstName }
+func (u *User) LastName() string     { return u.lastName }
 func (u *User) Email() Email         { return u.email }
 func (u *User) PasswordHash() string { return u.password }
 func (u *User) Role() Role           { return u.role }

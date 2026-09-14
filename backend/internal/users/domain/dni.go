@@ -11,6 +11,7 @@ type Dni struct {
 }
 
 func NewDni(value string) (Dni, error) {
+
 	if !dniRegex.MatchString(value) {
 		return Dni{}, ErrInvalidDni
 	}

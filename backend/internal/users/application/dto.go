@@ -7,16 +7,18 @@ import (
 )
 
 type RegisterUserInput struct {
-	FullName string
-	Email    string
-	Password string
-	Role     string
-	Dni      string
+	FirstName string
+	LastName  string
+	Email     string
+	Password  string
+	Role      string
+	Dni       string
 }
 
 type RegisterUserOutput struct {
 	ID        uint      `json:"id"`
-	FullName  string    `json:"full_name"`
+	FirstName string    `json:"first_name"`
+	LastName  string    `json:"last_name"`
 	Email     string    `json:"email"`
 	Dni       string    `json:"dni"`
 	Role      string    `json:"role"`
@@ -37,7 +39,8 @@ type LoginOutput struct {
 
 type UsersOutput struct {
 	ID        uint      `json:"id"`
-	FullName  string    `json:"full_name"`
+	FirstName string    `json:"first_name"`
+	LastName  string    `json:"last_name"`
 	Email     string    `json:"email"`
 	Dni       string    `json:"dni"`
 	Role      string    `json:"role"`
@@ -49,7 +52,8 @@ type UsersOutput struct {
 func toOutput(u *domain.User) *UsersOutput {
 	return &UsersOutput{
 		ID:        u.ID(),
-		FullName:  u.FullName(),
+		FirstName: u.FirstName(),
+		LastName:  u.LastName(),
 		Email:     u.Email().String(),
 		Role:      string(u.Role()),
 		Dni:       u.Dni().String(),

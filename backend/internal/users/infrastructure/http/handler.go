@@ -2,6 +2,7 @@ package http
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joaquin22/hospital-api/internal/shared/infrastructure/response"
@@ -12,13 +13,15 @@ type UserHandler struct {
 	registerUC  *application.RegisterUserUseCase
 	loginUC     *application.LoginUserUseCase
 	listUsersUC *application.ListUsersUseCase
+	getUserUC   *application.GetUserUseCase
 }
 
-func NewUserHandler(registerUC *application.RegisterUserUseCase, loginUC *application.LoginUserUseCase, listUsersUC *application.ListUsersUseCase) *UserHandler {
+func NewUserHandler(registerUC *application.RegisterUserUseCase, loginUC *application.LoginUserUseCase, listUsersUC *application.ListUsersUseCase, getUserUC *application.GetUserUseCase) *UserHandler {
 	return &UserHandler{
 		registerUC:  registerUC,
 		loginUC:     loginUC,
 		listUsersUC: listUsersUC,
+		getUserUC:   getUserUC,
 	}
 }
 
@@ -31,11 +34,12 @@ func (h *UserHandler) Register(c *gin.Context) {
 	}
 
 	output, err := h.registerUC.Execute(application.RegisterUserInput{
-		FullName: req.FullName,
-		Email:    req.Email,
-		Password: req.Password,
-		Dni:      req.Dni,
-		Role:     req.Role,
+		FirstName: req.FirstName,
+		LastName:  req.LastName,
+		Email:     req.Email,
+		Password:  req.Password,
+		Dni:       req.Dni,
+		Role:      req.Role,
 	})
 	if err != nil {
 		response.ErrorResponse(c, http.StatusInternalServerError, "error registering user", err)
@@ -73,4 +77,23 @@ func (h *UserHandler) ListUsers(c *gin.Context) {
 	}
 
 	response.SuccessResponse(c, http.StatusOK, users)
+}
+
+func (h *UserHandler) GetUser(c *gin.Context) {
+	idParam := c.Param("id")
+	id, err := strconv.ParseUint(idParam, 10, 64)
+
+	if err != nil {
+		response.ErrorResponse(c, http.StatusBadRequest, "invalid user ID", err)
+		return
+	}
+
+	output, err := h.getUserUC.Execute(uint(id))
+
+	if err != nil {
+		response.ErrorResponse(c, http.StatusNotFound, "error getting user", err)
+		return
+	}
+
+	response.SuccessResponse(c, http.StatusOK, output)
 }
