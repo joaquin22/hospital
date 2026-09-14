@@ -10,10 +10,11 @@ http:
     type: json
     data: |-
       {
-          "email": "tesss2t@example.com",
-          "password": "password123",
-          "full_name": "Test User",
-          "dni": "12341127",
+          "email": "admin@example.com",
+          "password": "password",
+          "first_name": "Test",
+          "last_name": "User",
+          "dni": "12341327",
           "role": "admin"
       }
   auth: inherit
@@ -23,3 +24,4 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+  forwardAuthorizationHeader: true

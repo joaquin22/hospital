@@ -11,8 +11,8 @@ http:
     data: |-
       
       {
-          "email": "tesss2t@example.com",
-          "password": "password123"
+          "email": "admin@example.com",
+          "password": "password"
       }
   auth: inherit
 
@@ -20,8 +20,8 @@ runtime:
   scripts:
     - type: after-response
       code: |-
-        const data = res.getBody()
-        bru.setEnvVar("token", data.token)
+        const body = res.getBody()
+        bru.setEnvVar("token", body.data.token)
 
 settings:
   encodeUrl: true

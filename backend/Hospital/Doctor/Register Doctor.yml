@@ -1,0 +1,29 @@
+info:
+  name: Register Doctor
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{url}}/doctors"
+  body:
+    type: json
+    data: |-
+      {
+        "first_name": "nombre",
+        "last_name": "apellido",
+        "email": "dotor1@mail.com",
+        "password": "qwe",
+        "dni": "77777771",
+        "role": "staff",
+        "specialty_id": 1,
+        "license_number": "1232"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

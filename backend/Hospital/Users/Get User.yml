@@ -1,18 +1,15 @@
 info:
-  name: Get Specialty
+  name: Get User
   type: http
-  seq: 3
+  seq: 2
 
 http:
   method: GET
-  url: "{{url}}/specialty/:id"
+  url: "{{url}}/users/:id"
   params:
     - name: id
-      value: "11"
+      value: "3"
       type: path
-  body:
-    type: json
-    data: ""
   auth: inherit
 
 settings:
