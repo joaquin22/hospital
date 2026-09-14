@@ -41,6 +41,7 @@ func (r *GormSpecialtyRepository) FindByID(id uint) (*domain.Speciality, error) 
 		}
 		return nil, err
 	}
+
 	return domain.Rehydrate(
 		model.ID,
 		model.Name,
