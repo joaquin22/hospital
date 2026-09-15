@@ -10,9 +10,11 @@ import { ThemeChanger } from '@/shared/redux/action';
 import { useRouter } from "next/router";
 import { connect } from 'react-redux';
 import SpkButton from '@/shared/@spk-reusable-components/uielements/spk-button';
+import { useLanguage } from "@/shared/i18n/LanguageContext";
 
 const Sidebar = ({ local_varaiable, ThemeChanger }: any) => {
 
+	const { t } = useLanguage();
 	let { basePath }: any = nextConfig;
 
 	const [menuitems, setMenuitems] = useState(MENUITEMS);
@@ -704,7 +706,7 @@ const Sidebar = ({ local_varaiable, ThemeChanger }: any) => {
                                                ${levelone.type === 'sub' ? 'slide has-sub' : ''} ${levelone?.active ? 'open' : ''} ${levelone?.selected ? 'active' : ''}`}>
 										{levelone.menutitle ?
 											<span className='category-name'>
-												{levelone.menutitle}
+												{t(levelone.menutitle)}
 											</span>
 											: ""}
 										{levelone.type === "link" ?
@@ -715,13 +717,13 @@ const Sidebar = ({ local_varaiable, ThemeChanger }: any) => {
 														<SpkButton buttontype="button" customClass="hs-tooltip-toggle  inline-flex justify-center items-center">
 															{levelone.icon}
 															<span className="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 transition-opacity inline-block absolute invisible z-10 !py-2 !px-3 !rounded-md bg-black text-xs font-medium text-white shadow-sm dark:bg-black" role="tooltip">
-																{levelone.title}
+																{t(levelone.title)}
 															</span>
 														</SpkButton>
 													</span>
 												</span>
 												{local_varaiable.dataVerticalStyle != "doublemenu" ? levelone.icon : ""}
-												<span className="side-menu__label">{levelone.title} {levelone.badgetxt ? (<span className={levelone.class}> {levelone.badgetxt}</span>
+												<span className="side-menu__label">{t(levelone.title)} {levelone.badgetxt ? (<span className={levelone.class}> {levelone.badgetxt}</span>
 												) : (
 													""
 												)}
@@ -731,7 +733,7 @@ const Sidebar = ({ local_varaiable, ThemeChanger }: any) => {
 										{levelone.type === "empty" ?
 											<Link href="#!" className='side-menu__item'
 												onClick={handleClick}
-											>{levelone.icon}<span className=""> {levelone.title} {levelone.badgetxt ? (
+											>{levelone.icon}<span className=""> {t(levelone.title)} {levelone.badgetxt ? (
 												<span className={levelone.class}>{levelone.badgetxt} </span>
 											) : (
 												""

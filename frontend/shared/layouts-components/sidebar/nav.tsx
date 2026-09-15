@@ -29,31 +29,47 @@ const Chartsicon = <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 si
 const Tableicon = <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 side-menu__icon" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 0 1-1.125-1.125M3.375 19.5h7.5c.621 0 1.125-.504 1.125-1.125m-9.75 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125m0 3.75h-7.5A1.125 1.125 0 0 1 12 18.375m9.75-12.75c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125m19.5 0v1.5c0 .621-.504 1.125-1.125 1.125M2.25 5.625v1.5c0 .621.504 1.125 1.125 1.125m0 0h17.25m-17.25 0h7.5c.621 0 1.125.504 1.125 1.125M3.375 8.25c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125m17.25-3.75h-7.5c-.621 0-1.125.504-1.125 1.125m8.625-1.125c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h7.5m-7.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125M12 10.875v-1.5m0 1.5c0 .621-.504 1.125-1.125 1.125M12 10.875c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125M13.125 12h7.5m-7.5 0c-.621 0-1.125.504-1.125 1.125M20.625 12c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h7.5M12 14.625v-1.5m0 1.5c0 .621-.504 1.125-1.125 1.125M12 14.625c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125m0 1.5v-1.5m0 0c0-.621.504-1.125 1.125-1.125m0 0h7.5"></path> </svg>
 
 const NestedmenuIcon = <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 side-menu__icon" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H9.75"></path> </svg>
+
+const Doctoresicon = <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 side-menu__icon" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-3a2.25 2.25 0 0 0-2.25 2.25V9M4.5 9a1.5 1.5 0 0 0-1.5 1.5v9A1.5 1.5 0 0 0 4.5 21h15a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 19.5 9h-15Zm6 6h6M13.5 12v6"></path> </svg>
+
+const Pacientesicon = <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 side-menu__icon" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z"></path> </svg>
+
+const Usuariosicon = <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 side-menu__icon" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"></path> </svg>
+
 export const MENUITEMS: any = [
 
   {
-    menutitle: "MAIN",
+    menutitle: "sidebar.main",
   },
 
   {
-    title: "Dashboards", icon: Dashboardicon, type: "sub", active: false, children: [
-      { path: "/components/dashboard/sales", type: "link", active: false, selected: false, dirchange: false,  title: "Sales" },
+    title: "sidebar.dashboards", icon: Dashboardicon, type: "sub", active: false, children: [
+      { path: "/components/dashboard/sales", type: "link", active: false, selected: false, dirchange: false,  title: "sidebar.sales" },
     ]
   },
 
   {
-    menutitle: "WEB APPS"
+    menutitle: "sidebar.webapps"
+  },
+  {
+    icon: Doctoresicon, title: "sidebar.doctores", type: "link", active: false, selected: false, path: "/components/doctores", dirchange: false,
+  },
+  {
+    icon: Pacientesicon, title: "sidebar.pacientes", type: "link", active: false, selected: false, path: "/components/pacientes", dirchange: false,
+  },
+  {
+    icon: Usuariosicon, title: "sidebar.usuarios", type: "link", active: false, selected: false, path: "/components/usuarios", dirchange: false,
   },
   {
     icon: NestedmenuIcon,
-    title: "Nested Menu",
+    title: "sidebar.nestedMenu",
     selected: false,
     active: false,
     type: "sub",
     children: [
       {
         path: "",
-        title: "Nested-1",
+        title: "sidebar.nested1",
         type: "empty",
         active: false,
         selected: false,
@@ -61,7 +77,7 @@ export const MENUITEMS: any = [
       },
 
       {
-        title: "Nested-2",
+        title: "sidebar.nested2",
         type: "sub",
         active: false,
         selected: false,
@@ -73,7 +89,7 @@ export const MENUITEMS: any = [
             active: false,
             selected: false,
             dirchange: false,
-            title: "Nested-2-1",
+            title: "sidebar.nested21",
           },
           {
             path: "",
@@ -81,7 +97,7 @@ export const MENUITEMS: any = [
             ctive: false,
             selected: false,
             dirchange: false,
-            title: "Nested-2-2",
+            title: "sidebar.nested22",
             children: [
               {
                 path: "",
@@ -89,7 +105,7 @@ export const MENUITEMS: any = [
                 active: false,
                 selected: false,
                 dirchange: false,
-                title: "Nested-2-2.1",
+                title: "sidebar.nested221",
               },
               {
                 path: "",
@@ -97,7 +113,7 @@ export const MENUITEMS: any = [
                 ctive: false,
                 selected: false,
                 dirchange: false,
-                title: "Nested-2-2.2",
+                title: "sidebar.nested222",
               },
             ],
           },
@@ -108,14 +124,14 @@ export const MENUITEMS: any = [
     ],
   },
   {
-    menutitle: "PAGES"
+    menutitle: "sidebar.pages"
   },
   {
-    icon: Erroricon, title: "Error", type: "sub", active: false, selected: false, children: [
+    icon: Erroricon, title: "sidebar.error", type: "sub", active: false, selected: false, children: [
 
-      { path: "/components/authentication/error/401", type: "link", active: false, selected: false, dirchange: false,  title: "401-Error" },
-      { path: "/components/authentication/error/404", type: "link", active: false, selected: false, dirchange: false,  title: "404-Error" },
-      { path: "/components/authentication/error/500", type: "link", active: false, selected: false, dirchange: false,  title: "500-Error" },
+      { path: "/components/authentication/error/401", type: "link", active: false, selected: false, dirchange: false,  title: "sidebar.error401" },
+      { path: "/components/authentication/error/404", type: "link", active: false, selected: false, dirchange: false,  title: "sidebar.error404" },
+      { path: "/components/authentication/error/500", type: "link", active: false, selected: false, dirchange: false,  title: "sidebar.error500" },
     ]
   },
 

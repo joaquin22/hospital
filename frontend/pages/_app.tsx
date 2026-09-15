@@ -8,6 +8,7 @@ const Authenticationlayout = dynamic(() => import("@/shared/layouts-components/l
 const Contentlayout = dynamic(() => import("@/shared/layouts-components/layouts/contentlayout"), { ssr: false });
 import { Initialload } from "@/shared/layouts-components/contextapi";
 import Loader from "@/shared/layouts-components/loader/loader";
+import { LanguageProvider } from "@/shared/i18n/LanguageContext";
 
 const layouts:any = {
 	Contentlayout: Contentlayout,
@@ -21,15 +22,17 @@ function App({ Component, pageProps }:any) {
 	
 	return (
 		<Provider store={store}>
+			<LanguageProvider>
 				<Initialload.Provider value={{ pageloading, setpageloading }}>
-						<RootWrapper>
-								<Suspense fallback={<Loader/>}>
-									<Layout>
-										<Component {...pageProps} />
-									</Layout>
-								</Suspense>
-						</RootWrapper>
+					<RootWrapper>
+						<Suspense fallback={<Loader/>}>
+							<Layout>
+								<Component {...pageProps} />
+							</Layout>
+						</Suspense>
+					</RootWrapper>
 				</Initialload.Provider>
+			</LanguageProvider>
 		</Provider>
 	);
 }

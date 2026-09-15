@@ -10,10 +10,13 @@ import SpkBadge from "@/shared/@spk-reusable-components/uielements/spk-badge";
 import SpkDropdown from "@/shared/@spk-reusable-components/uielements/spk-dropdown";
 import nextConfig from "@/next.config";
 import SpkButton from "@/shared/@spk-reusable-components/uielements/spk-button";
+import { useLanguage } from "@/shared/i18n/LanguageContext";
 
 const Header = ({ local_varaiable, ThemeChanger }: any) => {
 
   let { basePath } = nextConfig;
+
+  const { lang, setLanguage } = useLanguage();
 
   //full screen
   const [fullScreen, setFullScreen] = useState(false);
@@ -486,151 +489,41 @@ const Header = ({ local_varaiable, ThemeChanger }: any) => {
             {/* <!-- End::header-element --> */}
 
             {/* <!-- Start::header-element --> */}
-            <SpkDropdown Customclass="header-element country-selector  hidden sm:block [--placement:bottom-right] rtl:[--placement:bottom-left]" Linktag={true} Navigate='#!' Customtoggleclass='header-link hs-dropdown-toggle ti-dropdown-toggle' Svgicon='m10.5 21 5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 0 1 6-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138c.896.061 1.785.147 2.666.257m-4.589 8.495a18.023 18.023 0 0 1-3.827-5.802'
+            <SpkDropdown Customclass="header-element country-selector hidden sm:block [--placement:bottom-right] rtl:[--placement:bottom-left]" Linktag={true} Navigate='#!' Customtoggleclass='header-link hs-dropdown-toggle ti-dropdown-toggle' Svgicon='m10.5 21 5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 0 1 6-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138c.896.061 1.785.147 2.666.257m-4.589 8.495a18.023 18.023 0 0 1-3.827-5.802'
               SvgClass='w-6 h-6 header-link-icon' Linkclass='header-link hs-dropdown-toggle ti-dropdown-toggle' Svg={true} Custommenuclass='main-header-dropdown min-w-[10rem] hidden' SvgStroke="currentColor" Strokewidth="1.5" Svvgviewbox="0 0 24 24">
               <li>
-                <Link scroll={false}
-                  className="ti-dropdown-item flex items-center"
+                <a
+                  className={`ti-dropdown-item flex items-center ${lang === "es" ? "bg-primary/10" : ""}`}
                   href="#!"
+                  onClick={(e: React.MouseEvent) => { e.preventDefault(); setLanguage("es"); }}
                 >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <span className="avatar avatar-rounded avatar-xs leading-none me-2">
-                        <img
-                          src={`${process.env.NODE_ENV === 'production' ? basePath : ''}/assets/images/flags/us_flag.jpg`}
-                          alt="img"
-                        />
-                      </span>
-                      English
-                    </div>
+                  <div className="flex items-center">
+                    <span className="avatar avatar-rounded avatar-xs leading-none me-2">
+                      <img
+                        src={`${process.env.NODE_ENV === 'production' ? basePath : ''}/assets/images/flags/spain_flag.jpg`}
+                        alt="es"
+                      />
+                    </span>
+                    Español
                   </div>
-                </Link>
+                </a>
               </li>
               <li>
-                <Link scroll={false}
-                  className="ti-dropdown-item flex items-center"
+                <a
+                  className={`ti-dropdown-item flex items-center ${lang === "en" ? "bg-primary/10" : ""}`}
                   href="#!"
+                  onClick={(e: React.MouseEvent) => { e.preventDefault(); setLanguage("en"); }}
                 >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <span className="avatar avatar-rounded avatar-xs leading-none me-2">
-                        <img
-                          src={`${process.env.NODE_ENV === 'production' ? basePath : ''}/assets/images/flags/spain_flag.jpg`}
-                          alt="img"
-                        />
-                      </span>
-                      español
-                    </div>
+                  <div className="flex items-center">
+                    <span className="avatar avatar-rounded avatar-xs leading-none me-2">
+                      <img
+                        src={`${process.env.NODE_ENV === 'production' ? basePath : ''}/assets/images/flags/us_flag.jpg`}
+                        alt="en"
+                      />
+                    </span>
+                    English
                   </div>
-                </Link>
-              </li>
-              <li>
-                <Link scroll={false}
-                  className="ti-dropdown-item flex items-center"
-                  href="#!"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <span className="avatar avatar-rounded avatar-xs leading-none me-2">
-                        <img
-                          src={`${process.env.NODE_ENV === 'production' ? basePath : ''}/assets/images/flags/french_flag.jpg`}
-                          alt="img"
-                        />
-                      </span>
-                      français
-                    </div>
-                  </div>
-                </Link>
-              </li>
-              <li>
-                <Link scroll={false}
-                  className="ti-dropdown-item flex items-center"
-                  href="#!"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <span className="avatar avatar-rounded avatar-xs leading-none me-2">
-                        <img
-                          src={`${process.env.NODE_ENV === 'production' ? basePath : ''}/assets/images/flags/uae_flag.jpg`}
-                          alt="img"
-                        />
-                      </span>
-                      عربي
-                    </div>
-                  </div>
-                </Link>
-              </li>
-              <li>
-                <Link scroll={false}
-                  className="ti-dropdown-item flex items-center"
-                  href="#!"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <span className="avatar avatar-rounded avatar-xs leading-none me-2">
-                        <img
-                          src={`${process.env.NODE_ENV === 'production' ? basePath : ''}/assets/images/flags/germany_flag.jpg`}
-                          alt="img"
-                        />
-                      </span>
-                      Deutsch
-                    </div>
-                  </div>
-                </Link>
-              </li>
-              <li>
-                <Link scroll={false}
-                  className="ti-dropdown-item flex items-center"
-                  href="#!"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <span className="avatar avatar-rounded avatar-xs leading-none me-2">
-                        <img
-                          src={`${process.env.NODE_ENV === 'production' ? basePath : ''}/assets/images/flags/china_flag.jpg`}
-                          alt="img"
-                        />
-                      </span>
-                      中国人
-                    </div>
-                  </div>
-                </Link>
-              </li>
-              <li>
-                <Link scroll={false}
-                  className="ti-dropdown-item flex items-center"
-                  href="#!"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <span className="avatar avatar-rounded avatar-xs leading-none me-2">
-                        <img
-                          src={`${process.env.NODE_ENV === 'production' ? basePath : ''}/assets/images/flags/italy_flag.jpg`}
-                          alt="img"
-                        />
-                      </span>
-                      Italiano
-                    </div>
-                  </div>
-                </Link>
-              </li>
-              <li>
-                <Link scroll={false}
-                  className="ti-dropdown-item flex items-center"
-                  href="#!"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <span className="avatar avatar-rounded avatar-xs leading-none me-2">
-                        <img
-                          src={`${process.env.NODE_ENV === 'production' ? basePath : ''}/assets/images/flags/russia_flag.jpg`}
-                          alt="img"
-                        />
-                      </span>
-                      Русский
-                    </div>
-                  </div>
-                </Link>
+                </a>
               </li>
             </SpkDropdown>
             {/* <!-- End::header-element --> */}
@@ -683,199 +576,6 @@ const Header = ({ local_varaiable, ThemeChanger }: any) => {
             </li>
             {/* <!-- End light and dark theme --> */}
 
-            {/* <!-- End::header-element --> */}
-
-            {/* <!-- Start::header-element --> */}
-            <SpkDropdown Customclass="header-element cart-dropdown [--auto-close:inside]" Linktag={true} Navigate='#!' Svg={true} Linkclass='header-link hs-dropdown-toggle ti-dropdown-toggle' Badgetag={true} Badgeclass='rounded-full header-icon-badge text-white' Custommenuclass='main-header-dropdown'
-              Badgecolor='secondary' Badgeid='cart-icon-badge' Badgetext={remainingCount2} Badgepill={true} SvgClass='w-6 h-6 header-link-icon' SvgStroke="currentColor" Strokewidth="1.5" Svvgviewbox="0 0 24 24"
-              Svgicon='M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z'>
-
-              {/* <!-- Start::header-link|dropdown-toggle --> */}
-
-              {/* <!-- End::header-link|dropdown-toggle --> */}
-              {/* <!-- Start::main-header-dropdown --> */}
-              <div className="p-4">
-                <div className="flex items-center justify-between">
-                  <p className="mb-0 text-[15px] font-medium">
-                    Cart Items
-                    <SpkBadge variant="primarytint2color"
-                      customClass="text-white ms-1 !py-[0.15rem] rounded-full"
-                      Id="cart-data"
-                    >
-                      {remainingCount2} {remainingCount2 !== 1 ? '' : ''}
-                    </SpkBadge>
-                  </p>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-medium text-textmuted dark:text-textmuted/50">
-                      Sub Total :
-                    </span>
-                    <h6 className="mb-0"> $740</h6>
-                  </div>
-                </div>
-              </div>
-              <hr className="dropdown-divider" />
-              <SimpleBar className="list-none mb-0" id="header-cart-items-scroll">
-                {card.slice(0, maxDisplayItems).map((idx, index) => (
-                  <li className="ti-dropdown-item block" key={index}>
-                    {!card.includes(idx.id) && (
-                      <div className="flex items-center cart-dropdown-item gap-4">
-                        <div className="leading-none">
-                          <span className="avatar avatar-xl bg-primary/10">
-                            <img
-                              src={`${process.env.NODE_ENV === "production" ? basePath : ""}${idx.productpicture}`}
-                              alt="Wireless Headphones"
-                            />
-                          </span>
-                        </div>
-                        <div className="flex-auto">
-                          <div className="flex items-center justify-between mb-0">
-                            <div className="mb-0 text-[14px] font-medium">
-                              <Link scroll={false} href="#!">{idx.title}</Link>
-                              <div className="truncate">
-                                <p className="mb-0 header-cart-text truncate text-[11px] text-textmuted dark:text-textmuted/50">
-                                  {idx.data}
-                                </p>
-                                <h6 className="font-medium mb-0 mt-1">
-                                  <span className="text-success font-normal me-1 text-[11px] inline-block">
-                                    (Qty : {idx.quantity})
-                                  </span>
-                                  {idx.price}
-                                </h6>
-                              </div>
-                            </div>
-                            <div className="text-end">
-                              <Link scroll={false} onClick={(event) => handleDelete(idx.id, event)}
-                                href="#!"
-                                className="header-cart-remove dropdown-item-close"
-                                aria-label="anchor"
-                              >
-                                <i className="ri-close-line"></i>
-                              </Link>
-                              <h6 className="font-medium mb-0 mt-3">
-                                <span className="text-info op-4 font-normal me-1 text-[11px] inline-block">
-                                  Total :
-                                </span>
-                                {idx.discount}
-                              </h6>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </li>
-                ))}
-
-              </SimpleBar>
-              <div className={`p-4 empty-header-item border-t grid items-center ${cartItemCount === 0 ? 'hidden' : 'block'}`}>
-                <Link scroll={false}
-                  href="#!"
-                  className="ti-btn ti-btn-primary btn-wave text-center"
-                >
-                  Proceed to checkout
-                </Link>
-              </div>
-              <div className={`p-[3rem] empty-item ${cartItemCount === 0 ? 'block' : 'hidden'}`}>
-                <div className="text-center">
-                  <span className="avatar avatar-xl avatar-rounded bg-primary/10 !text-primary">
-                    <i className="ri-shopping-cart-2-line fs-2"></i>
-                  </span>
-                  <h6 className="font-medium mb-1 mt-3">
-                    Your Cart is Empty
-                  </h6>
-                  <span className="mb-3 font-normal text-[13px] block">
-                    Add some items to make me happy :)
-                  </span>
-                  <Link scroll={false}
-                    href="#!"
-                    className="ti-btn bg-primarytint1color text-white btn-wave ti-btn-sm m-1"
-                    data-abc="true"
-                  >
-                    continue shopping{" "}
-                    <i className="bi bi-arrow-right ms-1"></i>
-                  </Link>
-                </div>
-              </div>
-              {/* <!-- End::main-header-dropdown --> */}
-            </SpkDropdown>
-            {/* <!-- End::header-element --> */}
-
-            {/* <!-- Start::header-element --> */}
-            <SpkDropdown Linkclass='header-link hs-dropdown-toggle ti-dropdown-toggle' Linktag={true} Customclass="header-element notifications-dropdown !hidden xl:!block hs-dropdown ti-dropdown [--auto-close:inside]" Navigate='#!'
-              Id='messageDropdown' Svg={true} SvgClass='w-6 h-6 header-link-icon' Badgetag={true} Badgecolor='primarytint2color' Badgeclass='header-icon-pulse rounded custom-header-icon-pulse pulse pulse-secondary' Custommenuclass='main-header-dropdown' SvgStroke="currentColor" Strokewidth="1.5" Svvgviewbox="0 0 24 24"
-              Svgicon='M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0M3.124 7.5A8.969 8.969 0 0 1 5.292 3m13.416 0a8.969 8.969 0 0 1 2.168 4.5' >
-
-              {/* <!-- Start::header-link|dropdown-toggle --> */}
-
-              {/* <!-- End::header-link|dropdown-toggle --> */}
-              {/* <!-- Start::main-header-dropdown --> */}
-
-              <div className="p-4">
-                <div className="flex items-center justify-between">
-                  <p className="mb-0 text-[15px] font-medium">
-                    Notifications
-                  </p>
-                  <SpkBadge variant="secondary"
-                    customClass="text-white rounded-sm"
-                    id="notifiation-data"
-                  >
-                    {unreadCount} Unread
-                  </SpkBadge>
-                </div>
-              </div>
-              <div className="dropdown-divider"></div>
-              <SimpleBar className="list-none mb-0" id="header-notification-scroll">
-
-                {notifications.map((notification) => (
-                  <li className="ti-dropdown-item block" key={notification.id}>
-                    <div className="flex items-center">
-                      <div className="pe-2 leading-none">
-                          {notification.src}
-                      </div>
-                      <div className="grow flex items-center justify-between">
-                        <div>
-                          <p className="mb-0 font-medium">
-                            <Link scroll={false} href="#!">{notification.heading}</Link>
-                          </p>
-                          <div className="text-textmuted dark:text-textmuted/50 font-normal text-xs header-notification-text truncate">
-                            {notification.data}
-                          </div>
-                          <div className="font-normal text-[10px] text-textmuted dark:text-textmuted/50 op-8">
-                            {notification.data1}
-                          </div>
-                        </div>
-                        <div>
-                          <Link scroll={false} onClick={() => handleRemove1(notification.id)}
-                            aria-label="anchor"
-                            href="#!"
-                            className="min-w-fit-content dropdown-item-close1"
-                          >
-                            <i className="ri-close-line"></i>
-                          </Link>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                ))}
-
-                
-
-              </SimpleBar>
-              <div className={`p-4 empty-header-item1 border-t ${notifications.length === 0 ? 'hidden' : 'block'}`}>
-                  <div className="grid">
-                    <Link scroll={false} href="#!" className="ti-btn ti-btn-primary btn-wave">View All</Link>
-                  </div>
-                </div>
-                <div className={`p-[3rem] empty-item1 ${notifications.length === 0 ? 'block' : 'hidden'}`}>
-                  <div className="text-center">
-                    <span className="avatar avatar-xl avatar-rounded bg-secondary/10 text-secondary">
-                      <i className="ri-notification-off-line text-[2rem]"></i>
-                    </span>
-                    <h6 className="font-medium mt-4">No New Notifications</h6>
-                  </div>
-                </div>
-
-              {/* <!-- End::main-header-dropdown --> */}
-            </SpkDropdown>
             {/* <!-- End::header-element --> */}
 
             {/* <!-- Start::header-element --> */}
