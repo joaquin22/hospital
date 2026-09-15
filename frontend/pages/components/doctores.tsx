@@ -1,12 +1,22 @@
 import Spktables from "@/shared/@spk-reusable-components/tables/spk-tables";
-import { Doctoresdata } from "@/shared/data/doctorsdata";
 import { useLanguage } from "@/shared/i18n/LanguageContext";
 import Seo from "@/shared/layouts-components/seo/seo";
 import Link from "next/link";
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
+import type { DoctorUserOutput } from "@/shared/api/types/doctor";
+import { doctorService } from "@/shared/api/serivices/doctor.service";
 
 const Doctores = () => {
 	const { t } = useLanguage();
+	const [doctores, setDoctores] = useState<DoctorUserOutput[]>([]);
+
+	useEffect(() => {
+		doctorService
+			.list()
+			.then((response) => setDoctores(response.data))
+			.catch(() => setDoctores([]));
+	}, []);
+
 	return (
 		<Fragment>
 			<Seo title={t("doctores.titulo")} />
@@ -44,13 +54,13 @@ const Doctores = () => {
 										{ title: t("doctores.columnaLicencia") },
 									]}
 								>
-									{Doctoresdata.map((idx) => (
+									{doctores.map((idx) => (
 										<tr key={idx.id}>
-											<td><span className="font-medium">{idx.firstName}</span></td>
-											<td>{idx.lastName}</td>
+											<td><span className="font-medium">{idx.first_name}</span></td>
+											<td>{idx.last_name}</td>
 											<td>{idx.dni}</td>
 											<td className="text-textmuted dark:text-textmuted/50">{idx.email}</td>
-											<td><span className="badge bg-primary/10 text-primary">{idx.licenseNumber}</span></td>
+											<td><span className="badge bg-primary/10 text-primary">{idx.license_number}</span></td>
 										</tr>
 									))}
 								</Spktables>
