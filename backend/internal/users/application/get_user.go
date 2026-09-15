@@ -1,8 +1,6 @@
 package application
 
 import (
-	"fmt"
-
 	"github.com/joaquin22/hospital-api/internal/users/domain"
 )
 
@@ -24,6 +22,5 @@ func (uc *GetUserUseCase) Execute(id uint) (*UsersOutput, error) {
 	if user == nil {
 		return nil, domain.ErrUserNotFound
 	}
-	fmt.Printf("User: %+v\n", user)
 	return toOutput(user), nil
 }

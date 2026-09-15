@@ -12,12 +12,12 @@ http:
       {
         "first_name": "nombre",
         "last_name": "apellido",
-        "email": "dotor1@mail.com",
+        "email": "dotor2@mail.com",
         "password": "qwe",
-        "dni": "77777771",
+        "dni": "77777772",
         "role": "staff",
         "specialty_id": 1,
-        "license_number": "1232"
+        "license_number": "1231"
       }
   auth: inherit
 

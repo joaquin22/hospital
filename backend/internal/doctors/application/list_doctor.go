@@ -28,7 +28,6 @@ func (uc *ListDoctorUseCase) Execute() ([]*DoctorUserOutput, error) {
 			return nil, err
 		}
 
-		// fmt.Printf("Doctor: %+v, User: %+v\n", doctor, user)
 		outputs[i] = &DoctorUserOutput{
 			ID:            doctor.ID(),
 			FirstName:     user.FirstName,
