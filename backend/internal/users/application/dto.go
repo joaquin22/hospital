@@ -15,16 +15,24 @@ type RegisterUserInput struct {
 	Dni       string
 }
 
-type RegisterUserOutput struct {
-	ID        uint      `json:"id"`
-	FirstName string    `json:"first_name"`
-	LastName  string    `json:"last_name"`
-	Email     string    `json:"email"`
-	Dni       string    `json:"dni"`
-	Role      string    `json:"role"`
-	Active    bool      `json:"active"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+type UpdateUserInput struct {
+	ID        uint
+	FirstName string
+	LastName  string
+	Email     string
+	Password  string
+	Role      string
+	Dni       string
+}
+
+type PatchUserInput struct {
+	ID        uint
+	FirstName *string
+	LastName  *string
+	Email     *string
+	Password  *string
+	Role      *string
+	Dni       *string
 }
 
 type LoginInput struct {

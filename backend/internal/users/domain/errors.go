@@ -5,6 +5,7 @@ import "errors"
 var (
 	ErrInvalidEmail           = errors.New("user: email inválido")
 	ErrEmailAlreadyExists     = errors.New("user: el email ya está registrado")
+	ErrEmailNotFound          = errors.New("user: email no encontrado")
 	ErrInvalidDni             = errors.New("user: DNI inválido")
 	ErrDniAlreadyExists       = errors.New("user: el DNI ya está registrado")
 	ErrInvalidName            = errors.New("user: nombre inválido")

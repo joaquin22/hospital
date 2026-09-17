@@ -1,6 +1,8 @@
 package application
 
-import "github.com/joaquin22/hospital-api/internal/users/domain"
+import (
+	"github.com/joaquin22/hospital-api/internal/users/domain"
+)
 
 type LoginUserUseCase struct {
 	repo           domain.UserRepository

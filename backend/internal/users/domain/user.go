@@ -62,6 +62,17 @@ func (u *User) Deactivate() {
 	u.active = false
 }
 
+func (u *User) Update(firstName, lastName string, email Email, password string, dni Dni, role Role) error {
+	u.firstName = firstName
+	u.lastName = lastName
+	u.email = email
+	u.password = password
+	u.dni = dni
+	u.role = role
+	u.updatedAt = time.Now()
+	return nil
+}
+
 func (u *User) ID() uint             { return u.id }
 func (u *User) FirstName() string    { return u.firstName }
 func (u *User) LastName() string     { return u.lastName }

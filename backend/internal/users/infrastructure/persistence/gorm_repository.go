@@ -78,7 +78,7 @@ func (r *GormUserRepository) FindByDni(dni domain.Dni) (*domain.User, error) {
 
 func (r *GormUserRepository) FindAll() ([]*domain.User, error) {
 	var models []UserModel
-	if err := r.db.Find(&models).Error; err != nil {
+	if err := r.db.Order("id ASC").Find(&models).Error; err != nil {
 		return nil, err
 	}
 
