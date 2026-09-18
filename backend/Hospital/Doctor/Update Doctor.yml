@@ -14,14 +14,14 @@ http:
     type: json
     data: |-
       {
-        "first_name": "nombres update",
+        "first_name": "nombre update",
         "last_name": "apellido",
-        "email": "dotor2@mail.com",
-        "password": "qwe",
-        "dni": "77777772",
+        "email": "dotor1@mail.com",
+        "password": "123",
         "role": "staff",
-        "specialty_id": 1,
-        "license_number": "1231"
+        "dni": "77777771",
+        "speciality_id": 1,
+        "license_number": "1232"
       }
   auth: inherit
 

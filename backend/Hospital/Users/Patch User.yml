@@ -14,7 +14,7 @@ http:
     type: json
     data: |-
       {
-        "email": "mail@mail.com"
+        "first_name": "update"
       }
   auth: inherit
 

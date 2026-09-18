@@ -16,7 +16,7 @@ http:
         "password": "qwe",
         "dni": "77777775",
         "role": "staff",
-        "specialty_id": 1,
+        "speciality_id": 1,
         "license_number": "12311"
       }
   auth: inherit
