@@ -38,7 +38,6 @@ func NewDoctorHandler(listDoctorUC *application.ListDoctorUseCase, getDoctorUC *
 func (h *DoctorHandler) RegisterDoctor(c *gin.Context) {
 
 	var createDoctorRequest CreateDoctorRequest
-
 	if err := c.ShouldBindJSON(&createDoctorRequest); err != nil {
 		response.ErrorResponse(c, http.StatusBadRequest, "Invalid request body", err)
 		return
@@ -94,22 +93,23 @@ func (h *DoctorHandler) UpdateDoctor(c *gin.Context) {
 		return
 	}
 
-	var req UpdateDoctorRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
+	var updateDoctorRequest UpdateDoctorRequest
+
+	if err := c.ShouldBindJSON(&updateDoctorRequest); err != nil {
 		response.ErrorResponse(c, http.StatusBadRequest, "Invalid request body", err)
 		return
 	}
 
 	output, err := h.updateDoctorUC.Execute(application.UpdateDoctorInput{
 		ID:            uint(id),
-		FirstName:     req.FirstName,
-		LastName:      req.LastName,
-		Email:         req.Email,
-		Password:      req.Password,
-		Role:          req.Role,
-		Dni:           req.Dni,
-		SpecialtyID:   req.SpecialtyID,
-		LicenseNumber: req.LicenseNumber,
+		FirstName:     updateDoctorRequest.FirstName,
+		LastName:      updateDoctorRequest.LastName,
+		Email:         updateDoctorRequest.Email,
+		Password:      updateDoctorRequest.Password,
+		Role:          updateDoctorRequest.Role,
+		Dni:           updateDoctorRequest.Dni,
+		SpecialtyID:   updateDoctorRequest.SpecialtyID,
+		LicenseNumber: updateDoctorRequest.LicenseNumber,
 	})
 	if err != nil {
 		response.ErrorResponse(c, http.StatusInternalServerError, "Failed to update doctor", err)

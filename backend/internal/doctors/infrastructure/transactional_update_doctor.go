@@ -47,7 +47,6 @@ func (t *TransactionalUpdateDoctor) Execute(input doctorApp.UpdateDoctorInput) (
 		}); err != nil {
 			return err // dispara rollback — el UPDATE del user también se deshace
 		}
-
 		doctorOutput, err := updateDoctorUC.Execute(input)
 		if err != nil {
 			return err // dispara rollback — el UPDATE del user también se deshace

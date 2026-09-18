@@ -87,6 +87,7 @@ func main() {
 	updateDoctorUC := doctorInfra.NewTransactionalUpdateDoctor(db, passwordHasher)
 	patchDoctorUC := doctorApp.NewPatchDoctorUseCase(doctorRepo, getUserUC)
 	registerDoctorUC := doctorInfra.NewTransactionalRegisterDoctor(db, passwordHasher)
+
 	doctorHandler := doctorHTTP.NewDoctorHandler(listDoctorUC, getDoctorUC, updateDoctorUC, patchDoctorUC, registerDoctorUC)
 
 	// --- HTTP server ---

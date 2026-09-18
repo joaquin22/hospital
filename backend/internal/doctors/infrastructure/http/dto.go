@@ -7,7 +7,7 @@ type CreateDoctorRequest struct {
 	Password      string `json:"password" binding:"required"`
 	Dni           string `json:"dni" binding:"required"`
 	Role          string `json:"role" binding:"required"`
-	SpecialtyID   uint   `json:"specialty_id" binding:"required"`
+	SpecialtyID   uint   `json:"speciality_id" binding:"required"`
 	LicenseNumber string `json:"license_number" binding:"required"`
 }
 
@@ -18,11 +18,11 @@ type UpdateDoctorRequest struct {
 	Password      string `json:"password" binding:"required"`
 	Dni           string `json:"dni" binding:"required"`
 	Role          string `json:"role" binding:"required"`
-	SpecialtyID   uint   `json:"specialty_id" binding:"required"`
+	SpecialtyID   uint   `json:"speciality_id" binding:"required"`
 	LicenseNumber string `json:"license_number" binding:"required"`
 }
 
 type PatchDoctorRequest struct {
-	SpecialtyID   *uint   `json:"specialty_id"`
+	SpecialtyID   *uint   `json:"speciality_id"`
 	LicenseNumber *string `json:"license_number"`
 }
