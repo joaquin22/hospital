@@ -26,6 +26,24 @@ type RegisterDoctorOutput struct {
 	Doctor *DoctorOutput        `json:"doctor"`
 }
 
+type UpdateDoctorInput struct {
+	ID            uint
+	FirstName     string
+	LastName      string
+	Email         string
+	Password      string
+	Role          string
+	Dni           string
+	SpecialtyID   uint
+	LicenseNumber string
+}
+
+type PatchDoctorInput struct {
+	ID            uint
+	SpecialtyID   *uint
+	LicenseNumber *string
+}
+
 type DoctorOutput struct {
 	ID            uint   `json:"id"`
 	SpecialityID  uint   `json:"speciality_id"`
@@ -47,6 +65,20 @@ type DoctorUserOutput struct {
 func toOutput(d *domain.Doctor) *DoctorOutput {
 	return &DoctorOutput{
 		ID:            d.ID(),
+		SpecialityID:  d.SpecialityID(),
+		LicenseNumber: d.LicenseNumber(),
+	}
+}
+
+func toDoctorUserOutput(d *domain.Doctor, u *userApp.UsersOutput) *DoctorUserOutput {
+	return &DoctorUserOutput{
+		ID:            d.ID(),
+		UserID:        d.UserID(),
+		FirstName:     u.FirstName,
+		LastName:      u.LastName,
+		Email:         u.Email,
+		Dni:           u.Dni,
+		Role:          u.Role,
 		SpecialityID:  d.SpecialityID(),
 		LicenseNumber: d.LicenseNumber(),
 	}

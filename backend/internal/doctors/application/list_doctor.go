@@ -28,16 +28,7 @@ func (uc *ListDoctorUseCase) Execute() ([]*DoctorUserOutput, error) {
 			return nil, err
 		}
 
-		outputs[i] = &DoctorUserOutput{
-			ID:            doctor.ID(),
-			FirstName:     user.FirstName,
-			LastName:      user.LastName,
-			Email:         user.Email,
-			Dni:           user.Dni,
-			Role:          user.Role,
-			LicenseNumber: doctor.LicenseNumber(),
-			SpecialityID:  doctor.SpecialityID(),
-		}
+		outputs[i] = toDoctorUserOutput(doctor, user)
 	}
 	return outputs, nil
 }

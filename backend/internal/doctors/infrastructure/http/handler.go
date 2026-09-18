@@ -2,6 +2,7 @@ package http
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joaquin22/hospital-api/internal/doctors/application"
@@ -12,14 +13,24 @@ type RegisterDoctorExecutor interface {
 	Execute(input application.RegisterDoctorInput) (*application.RegisterDoctorOutput, error)
 }
 
+type UpdateDoctorExecutor interface {
+	Execute(input application.UpdateDoctorInput) (*application.DoctorUserOutput, error)
+}
+
 type DoctorHandler struct {
 	listDoctorUC     *application.ListDoctorUseCase
+	getDoctorUC      *application.GetDoctorUseCase
+	updateDoctorUC   UpdateDoctorExecutor
+	patchDoctorUC    *application.PatchDoctorUseCase
 	registerDoctorUC RegisterDoctorExecutor
 }
 
-func NewDoctorHandler(listDoctorUC *application.ListDoctorUseCase, registerDoctorUC RegisterDoctorExecutor) *DoctorHandler {
+func NewDoctorHandler(listDoctorUC *application.ListDoctorUseCase, getDoctorUC *application.GetDoctorUseCase, updateDoctorUC UpdateDoctorExecutor, patchDoctorUC *application.PatchDoctorUseCase, registerDoctorUC RegisterDoctorExecutor) *DoctorHandler {
 	return &DoctorHandler{
 		listDoctorUC:     listDoctorUC,
+		getDoctorUC:      getDoctorUC,
+		updateDoctorUC:   updateDoctorUC,
+		patchDoctorUC:    patchDoctorUC,
 		registerDoctorUC: registerDoctorUC,
 	}
 }
@@ -57,5 +68,79 @@ func (h *DoctorHandler) ListDoctors(c *gin.Context) {
 		response.ErrorResponse(c, http.StatusInternalServerError, "Failed to list doctors", err)
 		return
 	}
+	response.SuccessResponse(c, http.StatusOK, output)
+}
+
+func (h *DoctorHandler) GetDoctor(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		response.ErrorResponse(c, http.StatusBadRequest, "Invalid doctor ID", err)
+		return
+	}
+
+	output, err := h.getDoctorUC.Execute(uint(id))
+	if err != nil {
+		response.ErrorResponse(c, http.StatusNotFound, "Doctor not found", err)
+		return
+	}
+
+	response.SuccessResponse(c, http.StatusOK, output)
+}
+
+func (h *DoctorHandler) UpdateDoctor(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		response.ErrorResponse(c, http.StatusBadRequest, "Invalid doctor ID", err)
+		return
+	}
+
+	var req UpdateDoctorRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.ErrorResponse(c, http.StatusBadRequest, "Invalid request body", err)
+		return
+	}
+
+	output, err := h.updateDoctorUC.Execute(application.UpdateDoctorInput{
+		ID:            uint(id),
+		FirstName:     req.FirstName,
+		LastName:      req.LastName,
+		Email:         req.Email,
+		Password:      req.Password,
+		Role:          req.Role,
+		Dni:           req.Dni,
+		SpecialtyID:   req.SpecialtyID,
+		LicenseNumber: req.LicenseNumber,
+	})
+	if err != nil {
+		response.ErrorResponse(c, http.StatusInternalServerError, "Failed to update doctor", err)
+		return
+	}
+
+	response.SuccessResponse(c, http.StatusOK, output)
+}
+
+func (h *DoctorHandler) PatchDoctor(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		response.ErrorResponse(c, http.StatusBadRequest, "Invalid doctor ID", err)
+		return
+	}
+
+	var req PatchDoctorRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.ErrorResponse(c, http.StatusBadRequest, "Invalid request body", err)
+		return
+	}
+
+	output, err := h.patchDoctorUC.Execute(application.PatchDoctorInput{
+		ID:            uint(id),
+		SpecialtyID:   req.SpecialtyID,
+		LicenseNumber: req.LicenseNumber,
+	})
+	if err != nil {
+		response.ErrorResponse(c, http.StatusInternalServerError, "Failed to patch doctor", err)
+		return
+	}
+
 	response.SuccessResponse(c, http.StatusOK, output)
 }
