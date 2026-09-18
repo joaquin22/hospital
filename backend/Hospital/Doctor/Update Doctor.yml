@@ -1,23 +1,27 @@
 info:
-  name: Register Doctor
+  name: Update Doctor
   type: http
-  seq: 1
+  seq: 4
 
 http:
-  method: POST
-  url: "{{url}}/doctors"
+  method: PUT
+  url: "{{url}}/doctors/:id"
+  params:
+    - name: id
+      value: "1"
+      type: path
   body:
     type: json
     data: |-
       {
-        "first_name": "nombre",
+        "first_name": "nombres update",
         "last_name": "apellido",
-        "email": "dotora2@mail.com",
+        "email": "dotor2@mail.com",
         "password": "qwe",
-        "dni": "77777775",
+        "dni": "77777772",
         "role": "staff",
         "specialty_id": 1,
-        "license_number": "12311"
+        "license_number": "1231"
       }
   auth: inherit
 

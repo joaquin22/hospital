@@ -9,9 +9,8 @@ http:
   body:
     type: json
     data: |-
-      
       {
-          "email": "admin@example.com",
+          "email": "mail@mail.com",
           "password": "password"
       }
   auth: inherit
