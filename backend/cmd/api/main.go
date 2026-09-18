@@ -53,7 +53,9 @@ func main() {
 	loginUserUC := userApp.NewLoginUserUseCase(userRepo, passwordHasher, tokenManager)
 	listUsersUC := userApp.NewListUsersUseCase(userRepo)
 	getUserUC := userApp.NewGetUserUseCase(userRepo)
-	userHandler := userHTTP.NewUserHandler(registerUserUC, loginUserUC, listUsersUC, getUserUC)
+	updateUserUC := userApp.NewUpdateUserUseCase(userRepo, passwordHasher)
+	patchUserUC := userApp.NewPatchUserUseCase(userRepo, passwordHasher)
+	userHandler := userHTTP.NewUserHandler(registerUserUC, loginUserUC, listUsersUC, getUserUC, updateUserUC, patchUserUC)
 
 	// --- Wiring: Patients ---
 
@@ -81,8 +83,11 @@ func main() {
 
 	doctorRepo := doctorPersistence.NewGormDoctorRepository(db)
 	listDoctorUC := doctorApp.NewListDoctorUseCase(doctorRepo, getUserUC)
+	getDoctorUC := doctorApp.NewGetDoctorUseCase(doctorRepo, getUserUC)
+	updateDoctorUC := doctorInfra.NewTransactionalUpdateDoctor(db, passwordHasher)
+	patchDoctorUC := doctorApp.NewPatchDoctorUseCase(doctorRepo, getUserUC)
 	registerDoctorUC := doctorInfra.NewTransactionalRegisterDoctor(db, passwordHasher)
-	doctorHandler := doctorHTTP.NewDoctorHandler(listDoctorUC, registerDoctorUC)
+	doctorHandler := doctorHTTP.NewDoctorHandler(listDoctorUC, getDoctorUC, updateDoctorUC, patchDoctorUC, registerDoctorUC)
 
 	// --- HTTP server ---
 
