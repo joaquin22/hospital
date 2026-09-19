@@ -1,0 +1,33 @@
+info:
+  name: Patch Doctor
+  type: http
+  seq: 5
+
+http:
+  method: PATCH
+  url: "{{url}}/doctors/:id"
+  params:
+    - name: id
+      value: "1"
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+        "first_name": "doctor name update"
+      //   "last_name": "apellido",
+      //   "email": "dotor1@mail.com",
+      //   "password": "123",
+      //   "role": "staff",
+      //   "dni": "77777771",
+      //   "speciality_id": 1,
+      //   "license_number": "1232"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

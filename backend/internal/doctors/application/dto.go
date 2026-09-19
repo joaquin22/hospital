@@ -40,6 +40,12 @@ type UpdateDoctorInput struct {
 
 type PatchDoctorInput struct {
 	ID            uint
+	FirstName     *string
+	LastName      *string
+	Email         *string
+	Password      *string
+	Role          *string
+	Dni           *string
 	SpecialtyID   *uint
 	LicenseNumber *string
 }

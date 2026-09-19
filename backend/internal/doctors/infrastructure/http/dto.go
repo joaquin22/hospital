@@ -23,6 +23,12 @@ type UpdateDoctorRequest struct {
 }
 
 type PatchDoctorRequest struct {
+	FirstName     *string `json:"first_name"`
+	LastName      *string `json:"last_name"`
+	Email         *string `json:"email"`
+	Password      *string `json:"password"`
+	Dni           *string `json:"dni"`
+	Role          *string `json:"role"`
 	SpecialtyID   *uint   `json:"speciality_id"`
 	LicenseNumber *string `json:"license_number"`
 }

@@ -12,7 +12,6 @@ func RegisterRoutes(rg *gin.RouterGroup, handler *UserHandler) {
 	users := rg.Group("/users")
 	{
 		users.GET("", handler.ListUsers)
-		users.GET("/", handler.ListUsers)
 		users.GET("/:id", handler.GetUser)
 		users.PUT("/:id", handler.UpdateUser)
 		users.PATCH("/:id", handler.PatchUser)

@@ -17,15 +17,19 @@ type UpdateDoctorExecutor interface {
 	Execute(input application.UpdateDoctorInput) (*application.DoctorUserOutput, error)
 }
 
+type PatchDoctorExecutor interface {
+	Execute(input application.PatchDoctorInput) (*application.DoctorUserOutput, error)
+}
+
 type DoctorHandler struct {
 	listDoctorUC     *application.ListDoctorUseCase
 	getDoctorUC      *application.GetDoctorUseCase
-	updateDoctorUC   UpdateDoctorExecutor
-	patchDoctorUC    *application.PatchDoctorUseCase
 	registerDoctorUC RegisterDoctorExecutor
+	updateDoctorUC   UpdateDoctorExecutor
+	patchDoctorUC    PatchDoctorExecutor
 }
 
-func NewDoctorHandler(listDoctorUC *application.ListDoctorUseCase, getDoctorUC *application.GetDoctorUseCase, updateDoctorUC UpdateDoctorExecutor, patchDoctorUC *application.PatchDoctorUseCase, registerDoctorUC RegisterDoctorExecutor) *DoctorHandler {
+func NewDoctorHandler(listDoctorUC *application.ListDoctorUseCase, getDoctorUC *application.GetDoctorUseCase, updateDoctorUC UpdateDoctorExecutor, patchDoctorUC PatchDoctorExecutor, registerDoctorUC RegisterDoctorExecutor) *DoctorHandler {
 	return &DoctorHandler{
 		listDoctorUC:     listDoctorUC,
 		getDoctorUC:      getDoctorUC,
@@ -134,6 +138,12 @@ func (h *DoctorHandler) PatchDoctor(c *gin.Context) {
 
 	output, err := h.patchDoctorUC.Execute(application.PatchDoctorInput{
 		ID:            uint(id),
+		FirstName:     req.FirstName,
+		LastName:      req.LastName,
+		Email:         req.Email,
+		Password:      req.Password,
+		Role:          req.Role,
+		Dni:           req.Dni,
 		SpecialtyID:   req.SpecialtyID,
 		LicenseNumber: req.LicenseNumber,
 	})
