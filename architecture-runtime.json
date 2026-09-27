@@ -1,0 +1,286 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Hospital · topología de ejecución",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    {
+      "id": "next",
+      "type": "frontend",
+      "label": "Next.js 15",
+      "sublabel": ":3000 · next start",
+      "tag": "layouts con ssr:false",
+      "pos": [
+        40,
+        84
+      ],
+      "size": [
+        168,
+        88
+      ]
+    },
+    {
+      "id": "edge",
+      "type": "security",
+      "label": "Edge Middleware",
+      "sublabel": "middleware.ts",
+      "tag": "sólo presencia de cookie",
+      "pos": [
+        40,
+        210
+      ],
+      "size": [
+        168,
+        88
+      ]
+    },
+    {
+      "id": "reniec",
+      "type": "external",
+      "label": "Decolecta / RENIEC",
+      "sublabel": "api.decolecta.com/v1",
+      "tag": "existencia de DNI",
+      "pos": [
+        642,
+        132
+      ],
+      "size": [
+        220,
+        88
+      ]
+    },
+    {
+      "id": "browser",
+      "type": "external",
+      "label": "Navegador",
+      "sublabel": "cliente · React 19",
+      "tag": "sin proxy hacia la API",
+      "pos": [
+        40,
+        340
+      ],
+      "size": [
+        168,
+        88
+      ]
+    },
+    {
+      "id": "gin",
+      "type": "backend",
+      "label": "API Gin",
+      "sublabel": ":8080 · /api",
+      "tag": "21 rutas",
+      "pos": [
+        268,
+        340
+      ],
+      "size": [
+        168,
+        88
+      ]
+    },
+    {
+      "id": "authmw",
+      "type": "security",
+      "label": "JWTAuth + RequireRole",
+      "sublabel": "middleware/auth.go",
+      "tag": "HS256 · role admin",
+      "pos": [
+        468,
+        340
+      ],
+      "size": [
+        168,
+        88
+      ]
+    },
+    {
+      "id": "casos",
+      "type": "backend",
+      "label": "Casos de uso",
+      "sublabel": "4 contextos acotados",
+      "tag": "users · patients · doctors · specialty",
+      "pos": [
+        668,
+        340
+      ],
+      "size": [
+        168,
+        88
+      ]
+    },
+    {
+      "id": "repos",
+      "type": "backend",
+      "label": "Repositorios GORM",
+      "sublabel": "4 × persistence",
+      "tag": "AutoMigrate al arrancar",
+      "pos": [
+        868,
+        340
+      ],
+      "size": [
+        168,
+        88
+      ]
+    },
+    {
+      "id": "postgres",
+      "type": "database",
+      "label": "PostgreSQL 16",
+      "sublabel": ":5432 · hospital-db",
+      "tag": "4 tablas · 2 FK · sin TLS",
+      "pos": [
+        1068,
+        340
+      ],
+      "size": [
+        168,
+        88
+      ]
+    },
+    {
+      "id": "doctortx",
+      "type": "backend",
+      "label": "Casos transaccionales",
+      "sublabel": "doctors/infrastructure",
+      "tag": "db.Transaction + casos de users",
+      "pos": [
+        622,
+        520
+      ],
+      "size": [
+        260,
+        96
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Origen · navegador (no confiable)",
+      "wraps": [
+        "next",
+        "edge",
+        "browser"
+      ],
+      "pad": 14
+    },
+    {
+      "kind": "security-group",
+      "label": "Frontera de confianza · hospital-api (Docker)",
+      "wraps": [
+        "gin",
+        "authmw",
+        "casos",
+        "repos",
+        "postgres",
+        "doctortx"
+      ],
+      "pad": 14
+    }
+  ],
+  "connections": [
+    {
+      "id": "page-load",
+      "from": "browser",
+      "to": "edge",
+      "label": "HTTP :3000"
+    },
+    {
+      "id": "cookie-gate",
+      "from": "edge",
+      "to": "next",
+      "label": "verifica cookie hospital_token",
+      "variant": "security"
+    },
+    {
+      "id": "xhr",
+      "from": "browser",
+      "to": "gin",
+      "label": "XHR · Authorization: Bearer <JWT>",
+      "variant": "emphasis",
+      "labelDy": 68
+    },
+    {
+      "id": "identity",
+      "from": "authmw",
+      "to": "casos",
+      "label": "firma HS256 y rol validados",
+      "variant": "security",
+      "labelDy": 68
+    },
+    {
+      "id": "domain-ports",
+      "from": "casos",
+      "to": "repos"
+    },
+    {
+      "id": "sql",
+      "from": "repos",
+      "to": "postgres",
+      "label": "SQL · GORM / pgx",
+      "labelDy": 68
+    },
+    {
+      "id": "dni-check",
+      "from": "casos",
+      "to": "reniec",
+      "label": "HTTPS GET /reniec/dni · 10 s",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "doctor-writes",
+      "from": "casos",
+      "to": "doctortx",
+      "label": "POST PUT PATCH /doctors",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 24
+    },
+    {
+      "id": "tx-repos",
+      "from": "doctortx",
+      "to": "repos",
+      "label": "repositorios con scope de tx",
+      "fromSide": "right",
+      "toSide": "bottom"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Carga y renderizado",
+      "items": [
+        "Sin proxy: el navegador llama a :8080/api en cross-origin.",
+        "CORS abierto con Access-Control-Allow-Origin: *.",
+        "Layouts con ssr:false y sin getServerSideProps ni getStaticProps.",
+        "output: \"export\" comentado: el build es un servidor Node."
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Rutas y persistencia",
+      "items": [
+        "main.go:117 deja /api/users y /api/auth en el grupo público.",
+        "Pacientes, especialidades y médicos exigen role admin.",
+        "AutoMigrate crea 4 tablas al arrancar; no hay migraciones.",
+        "users 1-0..1 doctors *-1 specialties; patients sin FK."
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Confianza y dependencias",
+      "items": [
+        "JWT HS256; JWT_SECRET vale \"secret\" y compose no lo define.",
+        "El rol llega en el cuerpo del registro: admin es autoasignable.",
+        "Cookie no httpOnly; el middleware Edge sólo mira que exista.",
+        "Única salida externa: api.decolecta.com/v1/reniec/dni, 10 s."
+      ]
+    }
+  ]
+}
