@@ -1,12 +1,14 @@
 package http
 
 import (
+	"errors"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joaquin22/hospital-api/internal/shared/infrastructure/response"
 	"github.com/joaquin22/hospital-api/internal/users/application"
+	"github.com/joaquin22/hospital-api/internal/users/domain"
 )
 
 type UserHandler struct {
@@ -46,11 +48,25 @@ func (h *UserHandler) Register(c *gin.Context) {
 		Role:      req.Role,
 	})
 	if err != nil {
-		response.ErrorResponse(c, http.StatusInternalServerError, "error registering user", err)
+		response.ErrorResponse(c, statusForRegisterError(err), "error registering user", err)
 		return
 	}
 
 	response.SuccessResponse(c, http.StatusCreated, output)
+}
+
+// statusForRegisterError distingue los errores de validación (400) de los
+// fallos de la verificación externa del DNI (502 Bad Gateway) para que el
+// cliente no los confunda con un error del servidor.
+func statusForRegisterError(err error) int {
+	switch {
+	case errors.Is(err, domain.ErrDniNotFound):
+		return http.StatusBadRequest
+	case errors.Is(err, domain.ErrDniVerificationFailed):
+		return http.StatusBadGateway
+	default:
+		return http.StatusInternalServerError
+	}
 }
 
 func (h *UserHandler) Login(c *gin.Context) {

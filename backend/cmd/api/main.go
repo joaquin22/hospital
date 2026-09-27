@@ -25,6 +25,7 @@ import (
 	userApp "github.com/joaquin22/hospital-api/internal/users/application"
 	userHTTP "github.com/joaquin22/hospital-api/internal/users/infrastructure/http"
 	userPersistence "github.com/joaquin22/hospital-api/internal/users/infrastructure/persistence"
+	userReniec "github.com/joaquin22/hospital-api/internal/users/infrastructure/reniec"
 	userSecurity "github.com/joaquin22/hospital-api/internal/users/infrastructure/security"
 )
 
@@ -46,10 +47,16 @@ func main() {
 	}
 
 	// --- Wiring: User (auth) ---
+	if cfg.DNIKey == "" {
+		log.Fatalf("falta la variable de entorno DNI_KEY (token de Decolecta) necesaria para validar el DNI al registrar")
+	}
+
+	dniVerifier := userReniec.NewReniecClient(cfg.DNIKey, cfg.DNIAPIBaseURL)
+
 	userRepo := userPersistence.NewGormUserRepository(db)
 	passwordHasher := userSecurity.NewBcryptHasher()
 	tokenManager := userSecurity.NewJWTTokenGenerator(cfg.JWTSecret, cfg.JWTExpiryMinutes)
-	registerUserUC := userApp.NewRegisterUserUseCase(userRepo, passwordHasher)
+	registerUserUC := userApp.NewRegisterUserUseCase(userRepo, passwordHasher, dniVerifier)
 	loginUserUC := userApp.NewLoginUserUseCase(userRepo, passwordHasher, tokenManager)
 	listUsersUC := userApp.NewListUsersUseCase(userRepo)
 	getUserUC := userApp.NewGetUserUseCase(userRepo)
@@ -86,7 +93,7 @@ func main() {
 	getDoctorUC := doctorApp.NewGetDoctorUseCase(doctorRepo, getUserUC)
 	updateDoctorUC := doctorInfra.NewTransactionalUpdateDoctor(db, passwordHasher)
 	patchDoctorUC := doctorInfra.NewTransactionalPatchDoctor(db, passwordHasher)
-	registerDoctorUC := doctorInfra.NewTransactionalRegisterDoctor(db, passwordHasher)
+	registerDoctorUC := doctorInfra.NewTransactionalRegisterDoctor(db, passwordHasher, dniVerifier)
 
 	doctorHandler := doctorHTTP.NewDoctorHandler(listDoctorUC, getDoctorUC, updateDoctorUC, patchDoctorUC, registerDoctorUC)
 

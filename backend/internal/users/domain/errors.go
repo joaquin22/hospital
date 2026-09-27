@@ -8,6 +8,8 @@ var (
 	ErrEmailNotFound          = errors.New("user: email no encontrado")
 	ErrInvalidDni             = errors.New("user: DNI inválido")
 	ErrDniAlreadyExists       = errors.New("user: el DNI ya está registrado")
+	ErrDniNotFound            = errors.New("user: el DNI no existe en RENIEC")
+	ErrDniVerificationFailed  = errors.New("user: no se pudo verificar el DNI contra RENIEC")
 	ErrInvalidName            = errors.New("user: nombre inválido")
 	ErrInvalidRole            = errors.New("user: rol inválido")
 	ErrWeakPassword           = errors.New("user: la contraseña debe tener al menos 8 caracteres")

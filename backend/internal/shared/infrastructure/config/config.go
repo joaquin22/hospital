@@ -16,6 +16,8 @@ type Config struct {
 	DBSSLMode        string
 	JWTSecret        string
 	JWTExpiryMinutes int
+	DNIKey           string
+	DNIAPIBaseURL    string
 }
 
 func LoadConfig() *Config {
@@ -30,6 +32,8 @@ func LoadConfig() *Config {
 		DBSSLMode:        getEnv("DB_SSL_MODE", "disable"),
 		JWTSecret:        getEnv("JWT_SECRET", "secret"),
 		JWTExpiryMinutes: getEnvInt("JWT_EXPIRY_MINUTES", 60),
+		DNIKey:           getEnv("DNI_KEY", ""),
+		DNIAPIBaseURL:    getEnv("DNI_API_BASE_URL", "https://api.decolecta.com/v1"),
 	}
 }
 

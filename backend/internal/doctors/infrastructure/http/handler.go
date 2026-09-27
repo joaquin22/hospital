@@ -1,12 +1,14 @@
 package http
 
 import (
+	"errors"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joaquin22/hospital-api/internal/doctors/application"
 	"github.com/joaquin22/hospital-api/internal/shared/infrastructure/response"
+	userDomain "github.com/joaquin22/hospital-api/internal/users/domain"
 )
 
 type RegisterDoctorExecutor interface {
@@ -58,11 +60,25 @@ func (h *DoctorHandler) RegisterDoctor(c *gin.Context) {
 	})
 
 	if err != nil {
-		response.ErrorResponse(c, http.StatusInternalServerError, "Failed to register doctor", err)
+		response.ErrorResponse(c, statusForRegisterError(err), "Failed to register doctor", err)
 		return
 	}
 
 	response.SuccessResponse(c, http.StatusOK, output)
+}
+
+// statusForRegisterError distingue los errores de validación (400) de los
+// fallos de la verificación externa del DNI (502 Bad Gateway) para que el
+// cliente no los confunda con un error del servidor.
+func statusForRegisterError(err error) int {
+	switch {
+	case errors.Is(err, userDomain.ErrDniNotFound):
+		return http.StatusBadRequest
+	case errors.Is(err, userDomain.ErrDniVerificationFailed):
+		return http.StatusBadGateway
+	default:
+		return http.StatusInternalServerError
+	}
 }
 
 func (h *DoctorHandler) ListDoctors(c *gin.Context) {

@@ -12,12 +12,13 @@ import (
 )
 
 type TransactionalRegisterDoctor struct {
-	db     *gorm.DB
-	hasher userDomain.PasswordHasher
+	db          *gorm.DB
+	hasher      userDomain.PasswordHasher
+	dniVerifier userDomain.DniVerifier
 }
 
-func NewTransactionalRegisterDoctor(db *gorm.DB, hasher userDomain.PasswordHasher) *TransactionalRegisterDoctor {
-	return &TransactionalRegisterDoctor{db: db, hasher: hasher}
+func NewTransactionalRegisterDoctor(db *gorm.DB, hasher userDomain.PasswordHasher, dniVerifier userDomain.DniVerifier) *TransactionalRegisterDoctor {
+	return &TransactionalRegisterDoctor{db: db, hasher: hasher, dniVerifier: dniVerifier}
 }
 
 func (t *TransactionalRegisterDoctor) Execute(input doctorApp.RegisterDoctorInput) (*doctorApp.RegisterDoctorOutput, error) {
@@ -27,7 +28,7 @@ func (t *TransactionalRegisterDoctor) Execute(input doctorApp.RegisterDoctorInpu
 		userRepo := userPersistence.NewGormUserRepository(tx)
 		doctorRepo := doctorPersistence.NewGormDoctorRepository(tx)
 
-		registerUserUC := userApp.NewRegisterUserUseCase(userRepo, t.hasher)
+		registerUserUC := userApp.NewRegisterUserUseCase(userRepo, t.hasher, t.dniVerifier)
 		doctorUC := doctorApp.NewCreateDoctorUseCase(doctorRepo)
 
 		userOutput, err := registerUserUC.Execute(userApp.RegisterUserInput{

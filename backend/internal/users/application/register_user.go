@@ -1,18 +1,22 @@
 package application
 
 import (
+	"fmt"
+
 	"github.com/joaquin22/hospital-api/internal/users/domain"
 )
 
 type RegisterUserUseCase struct {
-	repo   domain.UserRepository
-	hasher domain.PasswordHasher
+	repo        domain.UserRepository
+	hasher      domain.PasswordHasher
+	dniVerifier domain.DniVerifier
 }
 
-func NewRegisterUserUseCase(repo domain.UserRepository, hasher domain.PasswordHasher) *RegisterUserUseCase {
+func NewRegisterUserUseCase(repo domain.UserRepository, hasher domain.PasswordHasher, dniVerifier domain.DniVerifier) *RegisterUserUseCase {
 	return &RegisterUserUseCase{
-		repo:   repo,
-		hasher: hasher,
+		repo:        repo,
+		hasher:      hasher,
+		dniVerifier: dniVerifier,
 	}
 }
 
@@ -50,6 +54,15 @@ func (uc *RegisterUserUseCase) Execute(userInput RegisterUserInput) (*UsersOutpu
 
 	if existingDni != nil {
 		return nil, domain.ErrDniAlreadyExists
+	}
+
+	exists, err := uc.dniVerifier.Exists(dni.String())
+	if err != nil {
+		return nil, fmt.Errorf("%w: %v", domain.ErrDniVerificationFailed, err)
+	}
+
+	if !exists {
+		return nil, domain.ErrDniNotFound
 	}
 
 	hashedPassword, err := uc.hasher.Hash(userInput.Password)
