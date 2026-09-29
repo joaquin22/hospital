@@ -34,6 +34,16 @@ func (uc *PatchDoctorUseCase) Execute(input PatchDoctorInput) (*DoctorUserOutput
 		return nil, err
 	}
 
+	// La contraparte (users.active) la aplica el caso de uso de usuarios desde la
+	// transaccional que envuelve a este. Aquí va la de la ficha.
+	if input.Active != nil {
+		if *input.Active {
+			doctor.Activate()
+		} else {
+			doctor.Deactivate()
+		}
+	}
+
 	if err := uc.repo.Save(doctor); err != nil {
 		return nil, err
 	}

@@ -1,6 +1,10 @@
 package application
 
-import "github.com/joaquin22/hospital-api/internal/users/domain"
+import (
+	"fmt"
+
+	"github.com/joaquin22/hospital-api/internal/users/domain"
+)
 
 type PatchUserUseCase struct {
 	repo   domain.UserRepository
@@ -58,6 +62,10 @@ func (uc *PatchUserUseCase) Execute(input PatchUserInput) (*UsersOutput, error) 
 	hashedPassword := user.PasswordHash()
 
 	if input.Password != nil {
+		if err := domain.ValidatePassword(*input.Password); err != nil {
+			return nil, err
+		}
+
 		newHashedPassword, err := uc.hasher.Hash(*input.Password)
 		if err != nil {
 			return nil, err
@@ -98,6 +106,16 @@ func (uc *PatchUserUseCase) Execute(input PatchUserInput) (*UsersOutput, error) 
 		return nil, err
 	}
 
+	// User.Update no toca `active`: se aplica aparte para que un PATCH de los
+	// datos no altere el estado por accidente.
+	if input.Active != nil {
+		if *input.Active {
+			user.Activate()
+		} else {
+			user.Deactivate()
+		}
+	}
+	fmt.Println(user)
 	if err := uc.repo.Save(user); err != nil {
 		return nil, err
 	}

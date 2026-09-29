@@ -57,6 +57,10 @@ func (uc *UpdateUserUseCase) Execute(input UpdateUserInput) (*UsersOutput, error
 		}
 	}
 
+	if err := domain.ValidatePassword(input.Password); err != nil {
+		return nil, err
+	}
+
 	hashedPassword, err := uc.hasher.Hash(input.Password)
 	if err != nil {
 		return nil, err
@@ -64,6 +68,16 @@ func (uc *UpdateUserUseCase) Execute(input UpdateUserInput) (*UsersOutput, error
 
 	if err := user.Update(input.FirstName, input.LastName, email, hashedPassword, dni, role); err != nil {
 		return nil, err
+	}
+
+	// User.Update no toca `active`: se aplica aparte para que un PUT de los
+	// datos no altere el estado por accidente.
+	if input.Active != nil {
+		if *input.Active {
+			user.Activate()
+		} else {
+			user.Deactivate()
+		}
 	}
 
 	if err := uc.repo.Save(user); err != nil {

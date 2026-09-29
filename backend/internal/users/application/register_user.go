@@ -22,6 +22,12 @@ func NewRegisterUserUseCase(repo domain.UserRepository, hasher domain.PasswordHa
 
 func (uc *RegisterUserUseCase) Execute(userInput RegisterUserInput) (*UsersOutput, error) {
 
+	// Se valida primero, antes que nada externo: es un chequeo local y gratis,
+	// y así una contraseña débil no gasta una llamada a RENIEC.
+	if err := domain.ValidatePassword(userInput.Password); err != nil {
+		return nil, err
+	}
+
 	email, err := domain.NewEmail(userInput.Email)
 
 	if err != nil {

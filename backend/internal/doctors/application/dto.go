@@ -36,6 +36,7 @@ type UpdateDoctorInput struct {
 	Dni           string
 	SpecialtyID   uint
 	LicenseNumber string
+	Active        *bool
 }
 
 type PatchDoctorInput struct {
@@ -48,6 +49,7 @@ type PatchDoctorInput struct {
 	Dni           *string
 	SpecialtyID   *uint
 	LicenseNumber *string
+	Active        *bool
 }
 
 type DoctorOutput struct {
@@ -66,6 +68,7 @@ type DoctorUserOutput struct {
 	Dni           string `json:"dni"`
 	SpecialityID  uint   `json:"speciality_id"`
 	LicenseNumber string `json:"license_number"`
+	Active        bool   `json:"active"`
 }
 
 func toOutput(d *domain.Doctor) *DoctorOutput {
@@ -87,5 +90,10 @@ func toDoctorUserOutput(d *domain.Doctor, u *userApp.UsersOutput) *DoctorUserOut
 		Role:          u.Role,
 		SpecialityID:  d.SpecialityID(),
 		LicenseNumber: d.LicenseNumber(),
+		// Se expone el estado de la CUENTA y no el de la ficha porque es el
+		// que decide el acceso (es el que consulta el login). Ambas banderas se
+		// mantienen sincronizadas al escribir, así que solo divergirían si
+		// alguien modificase una por separado en la base.
+		Active: u.Active,
 	}
 }

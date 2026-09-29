@@ -21,7 +21,8 @@ http:
       //   "role": "staff",
       //   "dni": "77777771",
       //   "speciality_id": 1,
-      //   "license_number": "1232"
+      //   "license_number": "1232",
+      //   "active": false
       }
   auth: inherit
 

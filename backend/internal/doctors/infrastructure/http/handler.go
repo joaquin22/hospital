@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/joaquin22/hospital-api/internal/doctors/application"
+	"github.com/joaquin22/hospital-api/internal/doctors/domain"
 	"github.com/joaquin22/hospital-api/internal/shared/infrastructure/response"
 	userDomain "github.com/joaquin22/hospital-api/internal/users/domain"
 )
@@ -76,6 +77,28 @@ func statusForRegisterError(err error) int {
 		return http.StatusBadRequest
 	case errors.Is(err, userDomain.ErrDniVerificationFailed):
 		return http.StatusBadGateway
+	case errors.Is(err, userDomain.ErrWeakPassword):
+		return http.StatusBadRequest
+	default:
+		return http.StatusInternalServerError
+	}
+}
+
+// statusForWriteDoctorError separa los errores de validación y de dominio (400)
+// de los fallos inesperados (500). La escritura de un doctor delega en el caso
+// de uso de usuarios, así que aquí también puede aparecer un ErrWeakPassword.
+func statusForWriteDoctorError(err error) int {
+	switch {
+	case errors.Is(err, userDomain.ErrWeakPassword),
+		errors.Is(err, userDomain.ErrInvalidEmail),
+		errors.Is(err, userDomain.ErrInvalidDni),
+		errors.Is(err, userDomain.ErrInvalidName),
+		errors.Is(err, userDomain.ErrInvalidRole),
+		errors.Is(err, userDomain.ErrEmailAlreadyExists),
+		errors.Is(err, userDomain.ErrDniAlreadyExists):
+		return http.StatusBadRequest
+	case errors.Is(err, userDomain.ErrUserNotFound), errors.Is(err, domain.ErrDoctorNotFound):
+		return http.StatusNotFound
 	default:
 		return http.StatusInternalServerError
 	}
@@ -130,9 +153,10 @@ func (h *DoctorHandler) UpdateDoctor(c *gin.Context) {
 		Dni:           updateDoctorRequest.Dni,
 		SpecialtyID:   updateDoctorRequest.SpecialtyID,
 		LicenseNumber: updateDoctorRequest.LicenseNumber,
+		Active:        updateDoctorRequest.Active,
 	})
 	if err != nil {
-		response.ErrorResponse(c, http.StatusInternalServerError, "Failed to update doctor", err)
+		response.ErrorResponse(c, statusForWriteDoctorError(err), "Failed to update doctor", err)
 		return
 	}
 
@@ -162,9 +186,10 @@ func (h *DoctorHandler) PatchDoctor(c *gin.Context) {
 		Dni:           req.Dni,
 		SpecialtyID:   req.SpecialtyID,
 		LicenseNumber: req.LicenseNumber,
+		Active:        req.Active,
 	})
 	if err != nil {
-		response.ErrorResponse(c, http.StatusInternalServerError, "Failed to patch doctor", err)
+		response.ErrorResponse(c, statusForWriteDoctorError(err), "Failed to patch doctor", err)
 		return
 	}
 

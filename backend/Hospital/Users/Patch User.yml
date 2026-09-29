@@ -15,6 +15,7 @@ http:
     data: |-
       {
         "first_name": "update"
+      //   "active": false
       }
   auth: inherit
 

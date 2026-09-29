@@ -23,6 +23,7 @@ type UpdateUserInput struct {
 	Password  string
 	Role      string
 	Dni       string
+	Active    *bool
 }
 
 type PatchUserInput struct {
@@ -33,6 +34,7 @@ type PatchUserInput struct {
 	Password  *string
 	Role      *string
 	Dni       *string
+	Active    *bool
 }
 
 type LoginInput struct {

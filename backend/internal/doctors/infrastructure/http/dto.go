@@ -20,6 +20,7 @@ type UpdateDoctorRequest struct {
 	Role          string `json:"role" binding:"required"`
 	SpecialtyID   uint   `json:"speciality_id" binding:"required"`
 	LicenseNumber string `json:"license_number" binding:"required"`
+	Active        *bool  `json:"active"`
 }
 
 type PatchDoctorRequest struct {
@@ -31,4 +32,8 @@ type PatchDoctorRequest struct {
 	Role          *string `json:"role"`
 	SpecialtyID   *uint   `json:"speciality_id"`
 	LicenseNumber *string `json:"license_number"`
+	// Un doctor tiene dos banderas `active`: la de su ficha (doctors.active) y
+	// la de su cuenta (users.active). Este único campo las actualiza a las dos
+	// para que no puedan quedar contradictorias.
+	Active *bool `json:"active"`
 }

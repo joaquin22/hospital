@@ -38,6 +38,14 @@ func (uc *LoginUserUseCase) Execute(login LoginInput) (*LoginOutput, error) {
 		return nil, domain.ErrInvalidCredentials
 	}
 
+	// Se comprueba DESPUÉS de la contraseña a propósito: si se hiciera antes,
+	// un atacante podría distinguir qué emails existen y están desactivados
+	// probándolos sin saber la clave. Con este orden, sin la contraseña
+	// correcta la respuesta siempre es la misma.
+	if !user.Active() {
+		return nil, domain.ErrInactiveUser
+	}
+
 	token, expiresInSecond, err := uc.tokenGenerator.GenerateToken(user.ID(), user.Role())
 	if err != nil {
 		return nil, err

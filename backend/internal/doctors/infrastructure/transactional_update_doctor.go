@@ -44,6 +44,9 @@ func (t *TransactionalUpdateDoctor) Execute(input doctorApp.UpdateDoctorInput) (
 			Password:  input.Password,
 			Role:      input.Role,
 			Dni:       input.Dni,
+			// El estado se propaga a la cuenta del doctor para que las dos
+			// banderas (users.active y doctors.active) queden iguales.
+			Active: input.Active,
 		}); err != nil {
 			return err // dispara rollback — el UPDATE del user también se deshace
 		}

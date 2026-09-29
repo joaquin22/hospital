@@ -16,4 +16,5 @@ var (
 	ErrEmailAlreadyRegistered = errors.New("user: ya existe un usuario con ese email")
 	ErrUserNotFound           = errors.New("user: usuario no encontrado")
 	ErrInvalidCredentials     = errors.New("user: email o contraseña incorrectos")
+	ErrInactiveUser           = errors.New("user: la cuenta está desactivada")
 )

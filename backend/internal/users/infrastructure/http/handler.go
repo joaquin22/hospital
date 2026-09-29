@@ -64,9 +64,42 @@ func statusForRegisterError(err error) int {
 		return http.StatusBadRequest
 	case errors.Is(err, domain.ErrDniVerificationFailed):
 		return http.StatusBadGateway
+	case errors.Is(err, domain.ErrWeakPassword):
+		return http.StatusBadRequest
 	default:
 		return http.StatusInternalServerError
 	}
+}
+
+// statusForWriteUserError separa los errores de validación y de dominio (400)
+// de los fallos inesperados (500). Una contraseña débil es un error del
+// cliente, no del servidor.
+func statusForWriteUserError(err error) int {
+	switch {
+	case errors.Is(err, domain.ErrWeakPassword),
+		errors.Is(err, domain.ErrInvalidEmail),
+		errors.Is(err, domain.ErrInvalidDni),
+		errors.Is(err, domain.ErrInvalidName),
+		errors.Is(err, domain.ErrInvalidRole),
+		errors.Is(err, domain.ErrEmailAlreadyExists),
+		errors.Is(err, domain.ErrDniAlreadyExists):
+		return http.StatusBadRequest
+	case errors.Is(err, domain.ErrUserNotFound):
+		return http.StatusNotFound
+	default:
+		return http.StatusInternalServerError
+	}
+}
+
+// statusForLoginError separa "no puedes entrar" de "tu cuenta está dada de
+// baja". Lo segundo es 403 y no 400: las credenciales eran correctas, lo que
+// falla es la autorización. El cliente puede así ofrecer un mensaje distinto
+// ("reactivá tu cuenta") en lugar de un genérico "credenciales incorrectas".
+func statusForLoginError(err error) int {
+	if errors.Is(err, domain.ErrInactiveUser) {
+		return http.StatusForbidden
+	}
+	return http.StatusBadRequest
 }
 
 func (h *UserHandler) Login(c *gin.Context) {
@@ -82,7 +115,7 @@ func (h *UserHandler) Login(c *gin.Context) {
 	})
 
 	if err != nil {
-		response.ErrorResponse(c, http.StatusBadRequest, "error logging in", err)
+		response.ErrorResponse(c, statusForLoginError(err), "error logging in", err)
 		return
 	}
 
@@ -140,9 +173,10 @@ func (h *UserHandler) UpdateUser(c *gin.Context) {
 		Password:  req.Password,
 		Dni:       req.Dni,
 		Role:      req.Role,
+		Active:    req.Active,
 	})
 	if err != nil {
-		response.ErrorResponse(c, http.StatusInternalServerError, "error updating user", err)
+		response.ErrorResponse(c, statusForWriteUserError(err), "error updating user", err)
 		return
 	}
 
@@ -171,9 +205,10 @@ func (h *UserHandler) PatchUser(c *gin.Context) {
 		Password:  req.Password,
 		Dni:       req.Dni,
 		Role:      req.Role,
+		Active:    req.Active,
 	})
 	if err != nil {
-		response.ErrorResponse(c, http.StatusInternalServerError, "error patching user", err)
+		response.ErrorResponse(c, statusForWriteUserError(err), "error patching user", err)
 		return
 	}
 

@@ -16,6 +16,9 @@ type updateUserRequest struct {
 	Password  string `json:"password" binding:"required"`
 	Dni       string `json:"dni" binding:"required"`
 	Role      string `json:"role" binding:"required"` // ADMIN o RECEPTIONIST
+	// Puntero y no bool para que omitir el campo no desactive la cuenta por
+	// accidente (un bool omitido valdría false).
+	Active *bool `json:"active"`
 }
 
 type loginRequest struct {
@@ -30,4 +33,5 @@ type patchUserRequest struct {
 	Password  *string `json:"password"`
 	Dni       *string `json:"dni"`
 	Role      *string `json:"role"` // ADMIN o RECEPTIONIST
+	Active    *bool   `json:"active"`
 }

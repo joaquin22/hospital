@@ -24,6 +24,7 @@ func (r *GormUserRepository) Save(user *domain.User) error {
 		Password:  user.PasswordHash(),
 		Dni:       user.Dni().String(),
 		Role:      string(user.Role()),
+		Active:    user.Active(),
 		CreatedAt: user.CreatedAt(),
 		UpdatedAt: user.UpdatedAt(),
 	}
