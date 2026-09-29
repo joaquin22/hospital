@@ -5,6 +5,9 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
 
+// Debe coincidir con domain.MinPasswordLength (backend/internal/users/domain).
+const MIN_PASSWORD_LENGTH = 8;
+
 const EditarUsuario = () => {
 	const router = useRouter();
 	const { t } = useLanguage();
@@ -16,6 +19,9 @@ const EditarUsuario = () => {
 		dni: "",
 		email: "",
 		role: "",
+		// "true" / "false" como texto porque el select devuelve string; el
+		// payload lo convierte a boolean.
+		active: "",
 	});
 
 	const [newPassword, setNewPassword] = useState("");
@@ -36,6 +42,7 @@ const EditarUsuario = () => {
 					dni: response.data.dni,
 					email: response.data.email,
 					role: response.data.role,
+					active: String(response.data.active),
 				}),
 			)
 			.catch(() => setErrors({ form: "error al obtener el usuario" }));
@@ -53,6 +60,10 @@ const EditarUsuario = () => {
 		if (!data.dni.trim()) newErrors.dni = t("formulario.errorDni");
 		if (!data.email.trim()) newErrors.email = t("formulario.errorCorreo");
 		if (!data.role.trim()) newErrors.role = t("usuarios.errorRol");
+		// También protege de guardar antes de que termine el GET: sin esto un
+		// "active" todavía vacío se mandaría como false y daría de baja al
+		// usuario por accidente.
+		if (!data.active) newErrors.active = t("formulario.errorEstado");
 		setErrors(newErrors);
 		return Object.keys(newErrors).length === 0;
 	};
@@ -67,6 +78,7 @@ const EditarUsuario = () => {
 				dni: data.dni,
 				email: data.email,
 				role: data.role,
+				active: data.active === "true",
 			});
 			router.push("/components/usuarios");
 		} catch {
@@ -79,6 +91,11 @@ const EditarUsuario = () => {
 		if (!id) return;
 		if (!newPassword.trim()) {
 			setPassError(t("usuarios.errorPassword"));
+			return;
+		}
+		if (newPassword.length < MIN_PASSWORD_LENGTH) {
+			// Mismo mínimo que domain.ValidatePassword en el backend.
+			setPassError(t("usuarios.errorPasswordCorta"));
 			return;
 		}
 		if (newPassword !== confirmPassword) {
@@ -219,6 +236,28 @@ const EditarUsuario = () => {
 										</select>
 										{errors.role && (
 											<span className="text-danger text-xs mt-1">{errors.role}</span>
+										)}
+									</div>
+									<div className="xl:col-span-12 col-span-12">
+										<label htmlFor="active" className="form-label text-defaulttextcolor">
+											{t("formulario.estado")}<sup className="text-xs text-danger">*</sup>
+										</label>
+										<select
+											name="active"
+											className="form-control"
+											id="active"
+											value={data.active}
+											onChange={changeHandler}
+										>
+											<option value="">{t("formulario.placeholderEstado")}</option>
+											<option value="true">{t("formulario.activo")}</option>
+											<option value="false">{t("formulario.inactivo")}</option>
+										</select>
+										<span className="text-textmuted dark:text-textmuted/50 text-xs mt-1">
+											{t("formulario.estadoAyuda")}
+										</span>
+										{errors.active && (
+											<span className="text-danger text-xs mt-1">{errors.active}</span>
 										)}
 									</div>
 								</div>

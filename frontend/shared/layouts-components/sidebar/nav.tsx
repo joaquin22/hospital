@@ -36,6 +36,8 @@ const Pacientesicon = <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6
 
 const Usuariosicon = <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 side-menu__icon" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"></path> </svg>
 
+const Especialidadesicon = <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 side-menu__icon" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9"></path></svg>
+
 export const MENUITEMS: any = [
 
   {
@@ -59,6 +61,9 @@ export const MENUITEMS: any = [
   },
   {
     icon: Usuariosicon, title: "sidebar.usuarios", type: "link", active: false, selected: false, path: "/components/usuarios", dirchange: false,
+  },
+  {
+    icon: Especialidadesicon, title: "sidebar.especialidades", type: "link", active: false, selected: false, path: "/components/especialidades", dirchange: false,
   },
   {
     icon: NestedmenuIcon,

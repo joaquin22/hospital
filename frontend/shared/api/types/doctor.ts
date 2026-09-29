@@ -5,9 +5,21 @@ export interface CreateDoctorPayload {
 	password: string;
 	role: string;
 	dni: string;
-	specialty_id: number;
+	// El backend lo expone como `speciality_id` (no `specialty_id`).
+	speciality_id: number;
 	license_number: string;
 }
+
+// El PATCH acepta cualquier subconjunto de campos: los que llegan en null no
+// se tocan. La contraseña se deja fuera a propósito, se cambia por separado.
+export type PatchDoctorPayload = Partial<
+	Omit<CreateDoctorPayload, "password">
+> & {
+	password?: string;
+	// El backend actualiza con este único campo las dos banderas `active`
+	// (la de la ficha y la de la cuenta) y las deja sincronizadas.
+	active?: boolean;
+};
 
 export interface UserOutput {
 	id: number;
@@ -29,7 +41,7 @@ export interface DoctorOutput {
 
 export interface DoctorUserOutput {
 	id: number;
-	user_id?: number;
+	user_id: number;
 	first_name: string;
 	last_name: string;
 	email: string;
@@ -37,6 +49,7 @@ export interface DoctorUserOutput {
 	dni: string;
 	speciality_id: number;
 	license_number: string;
+	active: boolean;
 }
 
 export interface CreateDoctorResponse {
@@ -52,4 +65,16 @@ export interface ListDoctorsResponse {
 	code: number;
 	message: string;
 	data: DoctorUserOutput[];
+}
+
+export interface GetDoctorResponse {
+	code: number;
+	message: string;
+	data: DoctorUserOutput;
+}
+
+export interface UpdateDoctorResponse {
+	code: number;
+	message: string;
+	data: DoctorUserOutput;
 }

@@ -52,6 +52,8 @@ const Doctores = () => {
 										{ title: t("doctores.columnaDni") },
 										{ title: t("doctores.columnaCorreo") },
 										{ title: t("doctores.columnaLicencia") },
+                                        { title: t("doctores.columnaEstado") },
+										{ title: t("doctores.columnaAcciones") },
 									]}
 								>
 									{doctores.map((idx) => (
@@ -61,6 +63,27 @@ const Doctores = () => {
 											<td>{idx.dni}</td>
 											<td className="text-textmuted dark:text-textmuted/50">{idx.email}</td>
 											<td><span className="badge bg-primary/10 text-primary">{idx.license_number}</span></td>
+                                            <td>
+                                                {idx.active ? (
+                                                <span className="badge bg-success/10 text-success">
+                                                    {t("usuarios.activo")}
+                                                </span>
+                                                ) : (
+                                                <span className="badge bg-danger/10 text-danger">
+                                                    {t("usuarios.inactivo")}
+                                                </span>
+                                                )}
+                                            </td>
+											<td>
+												<Link
+													scroll={false}
+													href={`/components/doctores/editar/${idx.id}`}
+													className="ti-btn ti-btn-sm ti-btn-primary"
+												>
+													<i className="ri-edit-line me-1"></i>
+													{t("doctores.editar")}
+												</Link>
+											</td>
 										</tr>
 									))}
 								</Spktables>

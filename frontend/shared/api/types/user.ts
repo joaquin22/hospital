@@ -9,7 +9,11 @@ export interface CreateUserPayload {
 
 export type PatchUserPayload = Partial<
   Omit<CreateUserPayload, "password">
->;
+> & {
+  // Omitirlo deja el estado como está; mandarlo cambia la cuenta. El backend
+  // lo tipa como *bool por lo mismo.
+  active?: boolean;
+};
 
 export interface ChangePasswordPayload {
 	password: string;

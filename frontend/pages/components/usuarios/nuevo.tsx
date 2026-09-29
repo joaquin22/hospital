@@ -5,6 +5,10 @@ import { userService } from "@/shared/api/serivices/user.service";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Fragment, useState } from "react";
+import { notifier } from "@/utils/notifier";
+
+// Debe coincidir con domain.MinPasswordLength (backend/internal/users/domain).
+const MIN_PASSWORD_LENGTH = 8;
 
 const NuevoUsuario = () => {
   const router = useRouter();
@@ -40,7 +44,12 @@ const NuevoUsuario = () => {
       newErrors.dni = t("formulario.errorDniInvalido");
     }
     if (!data.email.trim()) newErrors.email = t("formulario.errorCorreo");
-    if (!data.password.trim()) newErrors.password = t("usuarios.errorPassword");
+    if (!data.password.trim()) {
+      newErrors.password = t("usuarios.errorPassword");
+    } else if (data.password.length < MIN_PASSWORD_LENGTH) {
+      // Mismo mínimo que domain.ValidatePassword en el backend.
+      newErrors.password = t("usuarios.errorPasswordCorta");
+    }
     if (!data.role.trim()) newErrors.role = t("usuarios.errorRol");
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -58,11 +67,9 @@ const NuevoUsuario = () => {
         password: data.password,
         role: data.role,
       });
+      notifier.success("Usuario creado correctamente");
       router.push("/components/usuarios");
     } catch (error) {
-      // El backend responde 400 con el error de dominio (por ejemplo
-      // "user: el DNI no existe en RENIEC"); se muestra debajo del campo
-      // correspondiente o arriba del formulario si no corresponde a un campo.
       const apiError = resolveApiError(error, t, "usuarios.errorCrear");
       setErrors(
         apiError.field
